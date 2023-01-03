@@ -10,8 +10,8 @@ function downloadVM(){
 	
 	mkdir -p $BUILD_VMS_DIR/$NAME
 
-	pushd $BUILD_VMS_DIR/$NAME
+	pushd $BUILD_VMS_DIR/$NAME > /dev/null
 	wget $URL -O downloadedVM.zip
 	unzip downloadedVM.zip
-	popd
+	popd > /dev/null
 }
