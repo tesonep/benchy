@@ -1,3 +1,6 @@
+set -e
+[[ ! -z "$DEBUG" ]] && set -x
+
 ARCH=$(uname -m)
 OS=$(uname -s)
 BUILD_VMS_DIR=$2

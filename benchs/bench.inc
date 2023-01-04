@@ -1,3 +1,4 @@
+set -e
 [[ ! -z "$DEBUG" ]] && set -x
 
 ITERATIONS=${ITERATIONS:=30}
@@ -11,8 +12,7 @@ BENCHES_SCRIPT_DIR=$1
 BUILD_VMS_DIR=$2 
 BUILD_IMAGES_DIR=$3 
 BUILD_RESULTS_DIR=$4
-
-DATE=$(date +%Y-%m-%d)
+DATE=$5
 
 if [ "$OS" == "Darwin" ]; then
 	VM_CMD="Pharo.app/Contents/MacOS/Pharo"
