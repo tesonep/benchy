@@ -8,9 +8,16 @@ library(ggpubr)
 
 cmdArgs <- commandArgs()
 
-date<- cmdArgs[6] #eg '2023-01-04'
-experimentName <- cmdArgs[7] #eg 'opalTests'
-buildDir <- cmdArgs[8] #eg '/Users/admin/dev/Pharo/benchy/_build'
+if(is.na(cmdArgs[6])){
+  date<- '2023-01-04'
+  experimentName <- 'richards'
+  buildDir <- '/Users/admin/dev/Pharo/benchy/_build'
+}else{
+  date<- cmdArgs[6] #eg '2023-01-04'
+  experimentName <- cmdArgs[7] #eg 'opalTests'
+  buildDir <- cmdArgs[8] #eg '/Users/admin/dev/Pharo/benchy/_build'
+}
+
 
 outputDir <- paste(buildDir,"/plots/", experimentName, sep='')
 outputFile <- paste(outputDir, "/", experimentName, "-", date, ".pdf", sep='')
@@ -22,9 +29,12 @@ runs <- dir(paste(buildDir,'/results/', sep=""),
             pattern=paste(experimentName,"(.*)",date,"\\.csv", sep=""), 
             recursive=TRUE, full.names = TRUE)
 
+print(runs)
+
 merged <- data.frame()
 
 for (file in runs) {
+  
   parts <- unlist(strsplit(basename(file), '-'))
   image <- parts[2]
   vm <- parts[3]
@@ -32,7 +42,11 @@ for (file in runs) {
   values <- read.csv(file, header=FALSE)$V1
   names <- rep(paste(image, vm, sep='\n'), times=length(values))
   
-  merged <- merge(merged, data.frame('Time'=values, 'Name'=names),all=TRUE)
+  if(length(merged) == 0){
+    merged <- data.frame('Time'=values, 'Name'=names)
+  }else{
+    merged <- merge(merged, data.frame('Time'=values, 'Name'=names),all=TRUE,no.dups=FALSE)
+  }
 }
 
 p <- ggplot(merged, aes(y=Time,x=Name))+ 
