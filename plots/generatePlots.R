@@ -7,8 +7,6 @@ library(hrbrthemes)
 library(ggpubr)
 
 cmdArgs <- commandArgs()
-print(cmdArgs)
-
 
 date<- cmdArgs[6] #eg '2023-01-04'
 experimentName <- cmdArgs[7] #eg 'opalTests'
@@ -25,8 +23,6 @@ runs <- dir(paste(buildDir,'/results/', sep=""),
             recursive=TRUE, full.names = TRUE)
 
 merged <- data.frame()
-
-print(runs)
 
 for (file in runs) {
   parts <- unlist(strsplit(basename(file), '-'))
@@ -45,10 +41,11 @@ p <- ggplot(merged, aes(y=Time,x=Name))+
   geom_boxplot(width=0.1)+
   theme_classic()
 
-annotate_figure(p, top = text_grob(paste(experimentName, date)))
+pa <- annotate_figure(p, top = text_grob(paste(experimentName, date)))
 
 ggsave(
   outputFile,
+  plot = pa,
   width=5,
   height=4,
   unit="in")
