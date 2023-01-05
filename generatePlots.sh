@@ -12,13 +12,13 @@ then
 	BENCHES_NAMES="$1"
 fi
 
-#for bench in $BENCHES_NAMES
-#do
-#	rscript $SCRIPT_DIR/plots/generatePlots.R $DATE $bench $BUILD_DIR
-#done
+for bench in $BENCHES_NAMES
+do
+	rscript $SCRIPT_DIR/plots/generatePlots.R $DATE $bench $BUILD_DIR
+done
 
 #Generate historical data
 
 rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 richards 'Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat' $BUILD_DIR
-#rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 deltaBlue "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR
-#rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 slopstone "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR
+rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 deltaBlue "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR
+rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 slopstone "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR
