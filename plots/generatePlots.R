@@ -59,7 +59,4 @@ pa <- annotate_figure(p, top = text_grob(paste(experimentName, date)))
 
 ggsave(
   outputFile,
-  plot = pa,
-  width=5,
-  height=4,
-  unit="in")
+  plot = pa)

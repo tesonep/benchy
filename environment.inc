@@ -14,9 +14,12 @@ BUILD_VMS_DIR=$BUILD_DIR/VMs
 BUILD_IMAGES_DIR=$BUILD_DIR/images
 BUILD_RESULTS_DIR=$BUILD_DIR/results
 
+DATE=${DATE:=$(date +%Y-%m-%d)}
+
 ARCH=$(uname -m)
 OS=$(uname -s)
 
 echo "Script root directory: $SCRIPT_DIR"
 echo "VMS Script root directory: $VMS_SCRIPT_DIR"
 echo "Build directory: $BUILD_DIR"
+echo "Date to build:" $DATE
