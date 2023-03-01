@@ -1,24 +1,27 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Bash3 Boilerplate. Copyright (c) 2014, kvz.io
 
-set -x
+set -o errexit
+set -o pipefail
+set -o nounset
+# set -o xtrace
 
-source "environment.inc"
+# Set current file directory for relative access
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+source ${__dir}/"environment.inc"
+
+#Run the bench as argument, or all if argument is absent
 BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs basename -s .sh)
-
-#If the first parameter is passed is the name of the bench to generate
-if [ ! -z "$1" ]
-then
-	BENCHES_NAMES="$1"
-fi
+BENCHES_NAMES=${1-$BENCHES_NAMES}
 
 for bench in $BENCHES_NAMES
 do
-	rscript $SCRIPT_DIR/plots/generatePlots.R $DATE $bench $BUILD_DIR
+	rscript ${__dir}/plots/generatePlots.R $DATE $bench $BUILD_DIR
 done
 
 #Generate historical data
 
-rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 richards 'Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat' $BUILD_DIR
-rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 deltaBlue "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR
-rscript $SCRIPT_DIR/plots/generateHistoricalPlot.R 30 slopstone "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR
+rscript ${__dir}/plots/generateHistoricalPlot.R 30 richards 'Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat' $BUILD_DIR
+rscript ${__dir}/plots/generateHistoricalPlot.R 30 deltaBlue "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR
+rscript ${__dir}/plots/generateHistoricalPlot.R 30 slopstone "Pharo11SMark-latest9 Pharo11SMark-latest10 Pharo11ComposedImageSMark-newImageFormat" $BUILD_DIR

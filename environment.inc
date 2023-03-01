@@ -1,14 +1,22 @@
-set -e
+#!/usr/bin/env bash
+# Bash3 Boilerplate. Copyright (c) 2014, kvz.io
 
-[[ ! -z "$DEBUG" ]] && set -x
+set -o errexit
+set -o pipefail
+set -o nounset
+# set -o xtrace
 
-SCRIPT_DIR=$(dirname $(readlink -f $0))
+# Set current file directory for relative access
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-VMS_SCRIPT_DIR=$SCRIPT_DIR/VMs
-IMAGES_SCRIPT_DIR=$SCRIPT_DIR/images
-BENCHES_SCRIPT_DIR=$SCRIPT_DIR/benchs
 
-BUILD_DIR=${BUILD_DIR:=$SCRIPT_DIR/_build}
+
+VMS_SCRIPT_DIR=${__dir}/VMs
+IMAGES_SCRIPT_DIR=${__dir}/images
+BENCHES_SCRIPT_DIR=${__dir}/benchs
+
+#Get the absolute build dir, so scripts can move around and change the working directory
+BUILD_DIR=${BUILD_DIR:=`pwd`/_build}
 
 BUILD_VMS_DIR=$BUILD_DIR/VMs
 BUILD_IMAGES_DIR=$BUILD_DIR/images
@@ -19,7 +27,7 @@ DATE=${DATE:=$(date +%Y-%m-%d)}
 ARCH=$(uname -m)
 OS=$(uname -s)
 
-echo "Script root directory: $SCRIPT_DIR"
+echo "Script root directory: ${__dir}"
 echo "VMS Script root directory: $VMS_SCRIPT_DIR"
 echo "Build directory: $BUILD_DIR"
 echo "Date to build:" $DATE
