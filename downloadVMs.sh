@@ -1,6 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Bash3 Boilerplate. Copyright (c) 2014, kvz.io
 
-source "environment.inc"
+set -o errexit
+set -o pipefail
+set -o nounset
+# set -o xtrace
+
+# Set current file directory for relative access
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source ${__dir}/"environment.inc"
 
 #Delete existing VMs
 rm -rf $BUILD_VMS_DIR

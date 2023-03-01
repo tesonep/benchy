@@ -1,13 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Bash3 Boilerplate. Copyright (c) 2014, kvz.io
 
-source "environment.inc"
+set -o errexit
+set -o pipefail
+set -o nounset
+# set -o xtrace
+
+# Set current file directory for relative access
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source ${__dir}/"environment.inc"
+
+#Run the bench as argument, or all if argument is absent
 BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs basename -s .sh)
-
-#If the first parameter is passed is the name of the bench to run
-if [ ! -z "$1" ]
-then
-	BENCHES_NAMES="$1"
-fi
+BENCHES_NAMES=${1-$BENCHES_NAMES}
 
 for bench in $BENCHES_NAMES
 do
