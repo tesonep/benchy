@@ -8,6 +8,16 @@ Class {
 	#category : #BenchHistory
 }
 
+{ #category : #copying }
+BenchConfiguration >> , aBenchConfiguration [
+
+	^ BenchMulticonfiguration new
+		bench: bench;
+		addConfiguration: self;
+		addConfiguration: aBenchConfiguration;
+		yourself
+]
+
 { #category : #plotting }
 BenchConfiguration >> addToChart: aChart [
 
@@ -37,6 +47,11 @@ BenchConfiguration >> addToChart: aChart legend: aLegend [
 	aLegend ifNotNil: [ aLegend text: self name withBoxColor: p color ]
 ]
 
+{ #category : #accessing }
+BenchConfiguration >> bench: aBenchHistory [
+	bench := aBenchHistory
+]
+
 { #category : #computing }
 BenchConfiguration >> computeTimeAveragePerDay [
 
@@ -59,6 +74,11 @@ BenchConfiguration >> computeTimeAveragePerDay [
 ]
 
 { #category : #accessing }
+BenchConfiguration >> config: aCollection [
+	config := aCollection
+]
+
+{ #category : #accessing }
 BenchConfiguration >> dateForFileReference: aFileReference [
 
 	^ aFileReference withoutExtension basename last: 'xxxx-xx-xx' size
@@ -69,6 +89,12 @@ BenchConfiguration >> dates [
 
 	^ self resultFiles collect: [ :e |
 		  e withoutExtension basename last: 'xxxx-xx-xx' size ]
+]
+
+{ #category : #accessing }
+BenchConfiguration >> name [
+
+	^ config joinUsing: '-'
 ]
 
 { #category : #plotting }
@@ -95,4 +121,10 @@ BenchConfiguration >> resultFiles [
 		  :a
 		  :b |
 		  (self dateForFileReference: a) < (self dateForFileReference: b) ]
+]
+
+{ #category : #accessing }
+BenchConfiguration >> root [
+
+	^ bench root
 ]

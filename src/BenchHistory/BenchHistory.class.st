@@ -9,6 +9,15 @@ Class {
 }
 
 { #category : #accessing }
+BenchHistory >> configAt: aCollection [
+
+	^ BenchConfiguration new
+		bench: self;
+		config: aCollection;
+		yourself
+]
+
+{ #category : #accessing }
 BenchHistory >> configs [
 
 	| prefix |
@@ -21,11 +30,33 @@ BenchHistory >> configs [
 ]
 
 { #category : #accessing }
+BenchHistory >> fileReference [
+
+	^ self root fileReference / name
+]
+
+{ #category : #accessing }
 BenchHistory >> name [
 	^ name
 ]
 
 { #category : #accessing }
+BenchHistory >> name: aString [
+	name := aString
+]
+
+{ #category : #plotting }
+BenchHistory >> plot [
+
+	^ self configs plot
+]
+
+{ #category : #accessing }
 BenchHistory >> root [
 	^ root
+]
+
+{ #category : #accessing }
+BenchHistory >> root: aBenchHistoryChart [
+	root := aBenchHistoryChart
 ]

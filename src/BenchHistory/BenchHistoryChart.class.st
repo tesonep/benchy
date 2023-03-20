@@ -7,6 +7,14 @@ Class {
 	#category : #BenchHistory
 }
 
+{ #category : #'instance creation' }
+BenchHistoryChart class >> on: aPath [
+
+	^ self new
+		fileReference: aPath;
+		yourself
+]
+
 { #category : #benchmarks }
 BenchHistoryChart >> benchmarks [
 
@@ -18,4 +26,34 @@ BenchHistoryChart >> benchmarks [
 { #category : #accessing }
 BenchHistoryChart >> fileReference [
 	^ fileReference
+]
+
+{ #category : #accessing }
+BenchHistoryChart >> fileReference: aFileReference [
+
+	fileReference := aFileReference asFileReference
+]
+
+{ #category : #accessing }
+BenchHistoryChart >> historyOf: aString [
+
+	^ BenchHistory new
+		name: aString;
+		root: self;
+		yourself
+]
+
+{ #category : #plotting }
+BenchHistoryChart >> plot [
+
+	| canvas plots |
+	canvas := RSCanvas new.
+	plots := self benchmarks collect: [ :e | | p |
+		p := e plot build asShape.
+		canvas add: p.
+		p
+	].
+	RSGridLayout on: plots.
+	canvas @ RSCanvasController.
+	^ canvas
 ]
