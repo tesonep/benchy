@@ -60,3 +60,9 @@ BenchMulticonfiguration >> initialize [
 	super initialize.
 	configurations := OrderedCollection new
 ]
+
+{ #category : #accessing }
+BenchMulticonfiguration >> names [
+
+	^ configurations collect: #name
+]

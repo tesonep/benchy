@@ -52,6 +52,11 @@ BenchConfiguration >> bench: aBenchHistory [
 	bench := aBenchHistory
 ]
 
+{ #category : #benchmarking }
+BenchConfiguration >> benchmark [
+	^ bench
+]
+
 { #category : #computing }
 BenchConfiguration >> computeTimeAveragePerDay [
 
@@ -124,7 +129,31 @@ BenchConfiguration >> resultFiles [
 ]
 
 { #category : #accessing }
+BenchConfiguration >> resultsPerDate [
+
+	^ self dates collect: [ :each |
+		BenchDateResult new
+			configuration: self;
+			date: each;
+			yourself ]
+]
+
+{ #category : #accessing }
 BenchConfiguration >> root [
 
 	^ bench root
+]
+
+{ #category : #computing }
+BenchConfiguration >> timesForDate: aDate [
+
+	| file configName |
+	configName := bench name , '-' , (config joinUsing: '-').
+	file := self root fileReference / configName
+	        / (configName , '-' , aDate) , 'csv'.
+	^ (NeoCSVReader on: file readStream)
+		  separator: Character cr;
+		  fieldCount: 1;
+		  addFloatFieldRadixPointComma;
+		  collect: #first
 ]
