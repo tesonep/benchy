@@ -13,6 +13,6 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export DATE=${1:-$(date +%Y-%m-%d)}
 
 ${__dir}/downloadImages.sh
-${__dir}/downloadVMs.sh
+${__dir}/buildVMs.sh
 ${__dir}/runBenchs.sh
 ${__dir}/generatePlots.sh
