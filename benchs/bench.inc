@@ -44,7 +44,7 @@ do
 
 			pushd $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm > /dev/null
 			TIMEFORMAT=%R
-			{ time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>> $RESULT_FILE
+			{ time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>> $RESULT_FILE && true
 			popd > /dev/null
 		done
 	done
