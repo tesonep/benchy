@@ -15,4 +15,4 @@ export DATE=${1:-$(date +%Y-%m-%d)}
 ${__dir}/downloadImages.sh
 ${__dir}/buildVMs.sh
 ${__dir}/runBenchs.sh
-${__dir}/generatePlots.sh
+# ${__dir}/generatePlots.sh
