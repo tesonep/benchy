@@ -14,4 +14,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: smokerun
-      run: ITERATIONS=1 ./runAll
+      run: ITERATIONS=1 ./runAll.sh
