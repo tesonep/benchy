@@ -42,6 +42,7 @@ BenchHistory >> name [
 
 { #category : #accessing }
 BenchHistory >> name: aString [
+
 	name := aString
 ]
 
