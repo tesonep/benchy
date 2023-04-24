@@ -69,8 +69,14 @@ BenchConfiguration >> computeTimeAveragePerDay [
 			           fieldCount: 1;
 			           addFloatFieldRadixPointComma;
 			           collect: #first.
-		  average := times average.
-		  stdev := times stdev.
+		  times
+			  ifEmpty: [
+				  average := 0.
+				  stdev := 0 ]
+			  ifNotEmpty: [
+				  average := times average.
+				  stdev := times stdev ].
+
 		  {
 			  (self dateForFileReference: e).
 			  average.
@@ -81,6 +87,12 @@ BenchConfiguration >> computeTimeAveragePerDay [
 { #category : #accessing }
 BenchConfiguration >> config: aCollection [
 	config := aCollection
+]
+
+{ #category : #accessing }
+BenchConfiguration >> configurations [
+
+	^ { self }
 ]
 
 { #category : #accessing }
@@ -100,6 +112,12 @@ BenchConfiguration >> dates [
 BenchConfiguration >> name [
 
 	^ config joinUsing: '-'
+]
+
+{ #category : #accessing }
+BenchConfiguration >> names [
+
+	^ { self name }
 ]
 
 { #category : #plotting }
@@ -154,6 +172,6 @@ BenchConfiguration >> timesForDate: aDate [
 	^ (NeoCSVReader on: file readStream)
 		  separator: Character cr;
 		  fieldCount: 1;
-		  addFloatFieldRadixPointComma;
+		  addFloatField;
 		  collect: #first
 ]

@@ -8,26 +8,48 @@ Class {
 	#category : #BenchHistory
 }
 
+{ #category : #copying }
+BenchDateResult >> , aBench [
+
+	^ BenchMultiChart benchmarks: {
+			  self.
+			  aBench }
+]
+
 { #category : #adding }
 BenchDateResult >> addToChart: c [
 
 	| b times |
 	b := RSLegend new.
 
-	times := configuration configurations collect: [ :e |
-		e timesForDate: date ].
+	times := (configuration configurations sorted: #name ascending)
+		         collect: [ :e | e timesForDate: date ]
+		         thenSelect: [ :e | e isNotEmpty ].
 	c addPlot: (RSBoxPlot new y: times).
 
 	b container: c canvas.
-	b legendDo: [ :shape | shape scaleBy: 0.6 ].
+	b legendDo: [ :shape | shape scaleBy: 0.8 ].
 	b layout vertical.
-	b location outer; right; offset: 210@(-200).
+	b location
+		outer;
+		right;
+		offset: 210 @ -200.
 	b build
+]
+
+{ #category : #accessing }
+BenchDateResult >> configuration [
+	^ configuration
 ]
 
 { #category : #accessing }
 BenchDateResult >> configuration: aBenchMulticonfiguration [
 	configuration := aBenchMulticonfiguration
+]
+
+{ #category : #accessing }
+BenchDateResult >> date [
+	^ date
 ]
 
 { #category : #accessing }
@@ -47,4 +69,10 @@ BenchDateResult >> plot [
 	c addDecoration: RSVerticalTick new asFloat.
 	c addDecoration: RSYMarkerDecoration new average.
 	^ c
+]
+
+{ #category : #filter }
+BenchDateResult >> selectConfigs: aBlockClosure [ 
+
+	configuration selectConfigs: aBlockClosure 
 ]

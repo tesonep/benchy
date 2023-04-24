@@ -57,3 +57,13 @@ BenchHistoryChart >> plot [
 	canvas @ RSCanvasController.
 	^ canvas
 ]
+
+{ #category : #accessing }
+BenchHistoryChart >> resultsPerDate [
+
+	| benchsPerDay |
+	benchsPerDay := self benchmarks flatCollect: [ :bench |
+		                bench configs resultsPerDate ].
+	^ (benchsPerDay asOrderedCollection groupedBy: #date) collect: [
+		  :benchs | benchs reduce: [ :a :b | a , b ] ]
+]

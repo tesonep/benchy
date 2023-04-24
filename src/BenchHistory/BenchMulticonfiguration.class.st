@@ -64,5 +64,11 @@ BenchMulticonfiguration >> initialize [
 { #category : #accessing }
 BenchMulticonfiguration >> names [
 
-	^ configurations collect: #name
+	^ (configurations sorted: #name ascending) collect: #name
+]
+
+{ #category : #filter }
+BenchMulticonfiguration >> selectConfigs: aBlockClosure [ 
+
+	configurations := configurations select: aBlockClosure 
 ]
