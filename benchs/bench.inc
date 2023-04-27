@@ -14,11 +14,8 @@ BUILD_IMAGES_DIR=$3
 BUILD_RESULTS_DIR=$4
 DATE=$5
 
-# Optional parameter. Not all the benchmarks use this.
-VM_PAR_EDEN_SIZE=
-if [ ! -z $EDEN_SIZE ]; then
-	VM_PAR_EDEN_SIZE=$EDEN_SIZE
-fi
+# Optional parameter. Leaving it blank if is not defined by the benchmark
+EDEN_SIZE=${EDEN_SIZE:=}
 
 if [ "$OS" == "Darwin" ]; then
 	VM_CMD="Pharo.app/Contents/MacOS/Pharo"
