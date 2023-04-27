@@ -1,7 +1,7 @@
 set -e
 [[ ! -z "$DEBUG" ]] && set -x
 
-ITERATIONS=${ITERATIONS:=30}
+ITERATIONS=${ITERATIONS:=1}
 BENCH_NAME_WITH_EXTENSION=$(basename $0) 
 BENCH_NAME=${BENCH_NAME_WITH_EXTENSION%%.*}
 
@@ -13,6 +13,12 @@ BUILD_VMS_DIR=$2
 BUILD_IMAGES_DIR=$3 
 BUILD_RESULTS_DIR=$4
 DATE=$5
+
+# Optional parameter. Not all the benchmarks use this.
+VM_PAR_EDEN_SIZE=
+if [ ! -z $EDEN_SIZE ]; then
+	VM_PAR_EDEN_SIZE=$EDEN_SIZE
+fi
 
 if [ "$OS" == "Darwin" ]; then
 	VM_CMD="Pharo.app/Contents/MacOS/Pharo"
@@ -37,7 +43,7 @@ do
 			echo "ITERATION: $i" >> $OUT_FILE
 			echo "ITERATION: $i" >> $ERR_FILE
 			
-			FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
+			FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PAR_EDEN_SIZE $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
 			
 			echo "CMD: $FULL_COMMAND" >> $OUT_FILE
 			echo "CMD: $FULL_COMMAND" >> $ERR_FILE
