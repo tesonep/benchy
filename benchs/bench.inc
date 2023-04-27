@@ -15,7 +15,7 @@ BUILD_RESULTS_DIR=$4
 DATE=$5
 
 # Optional parameter. Leaving it blank if is not defined by the benchmark
-EDEN_SIZE=${EDEN_SIZE:=}
+VM_PARAMETERS=${VM_PARAMETERS:=}
 
 if [ "$OS" == "Darwin" ]; then
 	VM_CMD="Pharo.app/Contents/MacOS/Pharo"
@@ -40,7 +40,7 @@ do
 			echo "ITERATION: $i" >> $OUT_FILE
 			echo "ITERATION: $i" >> $ERR_FILE
 			
-			FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PAR_EDEN_SIZE $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
+			FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
 			
 			echo "CMD: $FULL_COMMAND" >> $OUT_FILE
 			echo "CMD: $FULL_COMMAND" >> $ERR_FILE
