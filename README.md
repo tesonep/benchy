@@ -4,7 +4,7 @@ Hello, I am an electric benchy, I can't go very fast or very far and if you driv
 
 # Quick Start
 
-I am little framework for doing benchmarks in Pharo. 
+I am a framework for doing benchmarks in Pharo. 
 
 Just run the `runAll.sh` script. That will:
 
