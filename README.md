@@ -51,16 +51,23 @@ You can also chain the following lines to run the same command with other images
 ```bash
 #!/bin/bash
 
-IMAGES="<the images you want your benchmark to run in>"
-VMs="<the VMs you want your benchmark to run with>"
+# Command
 PHARO_CMD="<the command you want the VM to execute>"
 
+# First configuration
+IMAGES="<the images you want your benchmark to run in>"
+VMs="<the VMs you want your benchmark to run with>"
+
+# Run
 source "$1/bench.inc"
+
+
+# Second configuration
 IMAGES="<other images>"
 VMs="<other VMs>"
 
+# Run
 source "$1/bench.inc"
-```
 
 Be sure not to forget to rewrite `source "$1/bench.inc"` so that the benchmark reruns with the new images and/or VMs.
 
