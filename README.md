@@ -30,6 +30,33 @@ The benchmarks that are here by default are made to test the performance of Phar
 2. [Optional] Add a `.sh` file in the `/vms` folder with the instructions to download your vm. If not you can use one of the already present vms.
 3. Execute `runBenchs.sh name_of_your_benchmark` with the name.s of your benchmark.s
 
+# Create your own configuration
+
+You can create your own benchmark configuration by creating a `.sh` file using the following template:
+
+```bash
+#!/bin/bash
+
+IMAGES="<the images you want your benchmark to run in>"
+VMs="<the VMs you want your benchmark to run with>"
+PHARO_CMD="<the command you want the VM to execute>"
+
+source "$1/bench.inc"
+```
+
+and then add it to the `/benchs` folder.
+
+You can, if you want, add the following lines to run the same command with other images and/or VMs:
+
+```bash
+IMAGES="<other images>"
+VMs="<other VMs>"
+
+source "$1/bench.inc"
+```
+
+Be sure not to forget to rewrite `source "$1/bench.inc"` so that the benchmark reruns with the new images and/or VMs.
+
 # More info
 
 In the `/src` folder there is code to make plots for the benchmarks.
