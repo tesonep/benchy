@@ -46,9 +46,16 @@ source "$1/bench.inc"
 
 and then add it to the `/benchs` folder.
 
-You can, if you want, add the following lines to run the same command with other images and/or VMs:
+You can also chain the following lines to run the same command with other images and/or VMs:
 
 ```bash
+#!/bin/bash
+
+IMAGES="<the images you want your benchmark to run in>"
+VMs="<the VMs you want your benchmark to run with>"
+PHARO_CMD="<the command you want the VM to execute>"
+
+source "$1/bench.inc"
 IMAGES="<other images>"
 VMs="<other VMs>"
 
