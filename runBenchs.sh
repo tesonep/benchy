@@ -9,6 +9,9 @@ set -o nounset
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Defines the directory where the benchmarks configurations are, default is benchs folder
+export BENCHES_SCRIPT_DIR=${BENCHES_SCRIPT_DIR:-$__dir/benchs}
+
 source ${__dir}/"environment.inc"
 
 basename(){

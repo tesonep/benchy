@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
+# Set current file directory for relative access
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Before any test, this command is executed
 oneTimeSetUp() {
-    ITERATIONS=1 ./runAll.sh aDate
+    ${__dir}/../downloadImages.sh
+    ${__dir}/../buildVMs.sh
+    ITERATIONS=1 DATE=aDate ${__dir}/../runBenchs.sh slopstone
 }
 
 # After all tests, the results files are removed
@@ -11,20 +16,24 @@ oneTimeTearDown() {
 }
 
 # Tests without benchmarks directory parameter. The tests don't check if every files exist after the command, they only check a few of them. It can be assumed that if they do exist, all exist.
-testNoParamDeltaBlue() {
-    assertTrue "[ -f ./_build/results/deltaBlue-Pharo11SMark-latest10/deltaBlue-Pharo11SMark-latest10-aDate.csv ]"
+testNoParamSmarkCompilerSlopstoneLatest10() {
+    assertTrue "[ -f ./_build/results/slopstone-Pharo11SMark-latest10/slopstone-Pharo11SMark-latest10-aDate.csv ]"
 }
 
-testNoParamFiles() {
-    assertTrue "[ -f ./_build/results/files-Pharo10-druid/files-Pharo10-druid-aDate.csv ]"
+testNoParamSmarkCompilerLatest9() {
+    assertTrue "[ -f ./_build/results/slopstone-Pharo11SMark-latest9/slopstone-Pharo11SMark-latest9-aDate.csv ]"
 }
 
-testNoParamCompiler() {
-    assertTrue "[ -f ./_build/results/smarkCompiler-Pharo11SMark-jitZero/smarkCompiler-Pharo11SMark-jitZero-aDate.csv ]"
+testNoParamSmarkCompilerDruid() {
+    assertTrue "[ -f ./_build/results/slopstone-Pharo11SMark-druid/slopstone-Pharo11SMark-druid-aDate.csv ]"
 }
 
-testNoParamRichards() {
-    assertTrue "[ -f ./_build/results/richards-Pharo11SMark-stack/richards-Pharo11SMark-stack-aDate.csv ]"
+testNoParamSmarkCompileriJitZero() {
+    assertTrue "[ -f ./_build/results/slopstone-Pharo11SMark-jitZero/slopstone-Pharo11SMark-jitZero-aDate.csv ]"
+}
+
+testNoParamSmarkCompilerStack() {
+    assertTrue "[ -f ./_build/results/slopstone-Pharo11SMark-stack/slopstone-Pharo11SMark-stack-aDate.csv ]"
 }
 
 # Load shUnit2.
