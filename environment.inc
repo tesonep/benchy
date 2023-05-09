@@ -13,7 +13,6 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 VMS_SCRIPT_DIR=${__dir}/VMs
 IMAGES_SCRIPT_DIR=${__dir}/images
-BENCHES_SCRIPT_DIR=${__dir}/benchs
 
 #Get the absolute build dir, so scripts can move around and change the working directory
 BUILD_DIR=${BUILD_DIR:=`pwd`/_build}

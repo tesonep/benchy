@@ -9,13 +9,24 @@ set -o nounset
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Defines the directory where the benchmarks configurations are, default is benchs folder
+export BENCHES_SCRIPT_DIR=${BENCHES_SCRIPT_DIR:-$__dir/benchs}
+
 source ${__dir}/"environment.inc"
 
+basename(){
+	local FILEPATH=$0
+	local FULLNAME="${FILEPATH##*/}"
+	echo ${FULLNAME%.*}
+}
+
+export -f basename
 #Run the bench as argument, or all if argument is absent
-BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs basename -s .sh)
+BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 BENCHES_NAMES=${1-$BENCHES_NAMES}
+echo $BENCHES_NAMES
 
 for bench in $BENCHES_NAMES
 do
-	bash $BENCHES_SCRIPT_DIR/$bench.sh $BENCHES_SCRIPT_DIR $BUILD_VMS_DIR $BUILD_IMAGES_DIR $BUILD_RESULTS_DIR $DATE
+	bash "$__dir/benchs/bench.inc" $BENCHES_SCRIPT_DIR $BUILD_VMS_DIR $BUILD_IMAGES_DIR $BUILD_RESULTS_DIR $DATE $BENCHES_SCRIPT_DIR/$bench.sh
 done
