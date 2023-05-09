@@ -28,7 +28,7 @@ jobs:
       run: cd ./benchy; bash ./test/noParamTest.sh
 
     - name: relative path test
-      run: cd ./benchy; bash ./benchy/test/relatPathTest.sh
+      run: cd ./benchy; bash ./test/relativePathTest.sh
 
     - name: absolute path test
-      run: cd ./benchy; bash ./benchy/test/absolPathTest.sh
+      run: cd ./benchy; bash ./test/absolutePathTest.sh
