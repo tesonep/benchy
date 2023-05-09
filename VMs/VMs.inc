@@ -16,6 +16,14 @@ BUILD_REPOS_DIR=$3
 FULLNAME=$(basename $0)
 NAME=${FULLNAME%%.*}
 
+if [ "$OS" == "Darwin" ]; then
+	VM_CMD="Pharo.app/Contents/MacOS/Pharo"
+fi
+
+if [ "$OS" == "Linux" ]; then
+	VM_CMD="pharo"
+fi
+
 function downloadVM(){
 	
 	URL=$1
@@ -51,5 +59,7 @@ function buildVM() {
 
 	echo "Building VM $NAME with $FLAVOUR"
 
-	cmake -DFLAVOUR=$FLAVOUR -S $PHAROVM_REPO_DIR -B $BUILD_VMS_DIR/$NAME/build -DPHARO_DEPENDENCIES_PREFER_DOWNLOAD_BINARIES=TRUE && cd $BUILD_VMS_DIR/$NAME/build && make install && cp -R $BUILD_VMS_DIR/$NAME/build/build/dist/Pharo.app $BUILD_VMS_DIR/$NAME
+	cmake -DFLAVOUR=$FLAVOUR -S $PHAROVM_REPO_DIR -B $BUILD_VMS_DIR/$NAME/build -DPHARO_DEPENDENCIES_PREFER_DOWNLOAD_BINARIES=TRUE
+    cmake --build $BUILD_VMS_DIR/$NAME/build --target install
+    cp -R $BUILD_VMS_DIR/$NAME/build/build/dist/* $BUILD_VMS_DIR/$NAME
 }
