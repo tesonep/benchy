@@ -32,7 +32,7 @@ runBenchs() {
 	do
 		for vm in $VMs
 		do
-			echo "Running bench \"$BENCH_NAME\" in \"$image\" on \"$vm\""
+			echo "Running bench \"$BENCH_NAME\" in \"$image\" on \"$vm\" for ${ITERATIONS} iterations"
 			mkdir -p $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
 			RESULT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.csv
 			OUT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.stdout

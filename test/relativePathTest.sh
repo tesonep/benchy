@@ -2,7 +2,7 @@
 
 # Before any test, this command is executed
 oneTimeSetUp() {
-    ITERATIONS=1 BENCHES_SCRIPT_DIR=test/benchsTest ./runAll.sh aDate
+    ITERATIONS=1 BENCHES_SCRIPT_DIR=test/testConfiguration ./runAll.sh aDate
 }
 
 # After all tests, the results files are removed
