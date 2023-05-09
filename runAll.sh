@@ -12,6 +12,9 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 export DATE=${1:-$(date +%Y-%m-%d)}
 
+# Defines the directory where the benchmarks configurations are, default is benchs folder
+export BENCHES_SCRIPT_DIR=${BENCHES_SCRIPT_DIR:-$__dir/benchs}
+
 ${__dir}/downloadImages.sh
 ${__dir}/buildVMs.sh
 ${__dir}/runBenchs.sh

@@ -22,6 +22,10 @@ One benchmark can be run on several images with several vms. Benchy will take ca
 
 Benchy will create a csv file with the time of the execution and two log files with the logs that happened during the execution. In your Pharo code you can to `anObj trace` to leave traces.
 
+# Parameters
+
+It is possible to specify which directory containing benchmarks you want benchy to use. To do so, you must write `BENCHES_SCRIPT_DIR=<path to your directory> ./runAll.sh`. The path can be either relative or absolute. If not specified, `BENCHES_SCRIPT_DIR` is by default the `benchs` folder of benchy.
+
 # Executing your benchmars
 
 The benchmarks that are here by default are made to test the performance of Pharo. If you want to run your own benchmarks you need to:
@@ -41,7 +45,7 @@ IMAGES="<the images you want your benchmark to run in>"
 VMs="<the VMs you want your benchmark to run with>"
 PHARO_CMD="<the command you want the VM to execute>"
 
-source "$1/bench.inc"
+runBenchs
 ```
 
 and then add it to the `/benchs` folder.
@@ -59,7 +63,7 @@ IMAGES="<the images you want your benchmark to run in>"
 VMs="<the VMs you want your benchmark to run with>"
 
 # Run
-source "$1/bench.inc"
+runBenchs
 
 
 # Second configuration
@@ -67,9 +71,14 @@ IMAGES="<other images>"
 VMs="<other VMs>"
 
 # Run
-source "$1/bench.inc"
+runBenchs
+```
 
-Be sure not to forget to rewrite `source "$1/bench.inc"` so that the benchmark reruns with the new images and/or VMs.
+Be sure not to forget to rewrite `runBenchs` so that the benchmark reruns with the new images and/or VMs.
+
+# Depedencies
+
+In order to run `benchParamTest.sh`, you need to download [shunit2](https://github.com/kward/shunit2) and add the path to the `shunit2` file to your `PATH`.
 
 # More info
 

@@ -12,7 +12,8 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ARCH=$(uname -m)
 OS=$(uname -s)
 BUILD_IMAGES_DIR=$2
-FULLNAME=$(basename $0)
+FILEPATH=$0
+FULLNAME="${FILEPATH##*/}"
 NAME=${FULLNAME%%.*}
 
 function downloadImage(){

@@ -14,7 +14,14 @@ source ${__dir}/"environment.inc"
 # Delete existing VMs
 rm -rf $BUILD_VMS_DIR
 
-VMS_NAMES=$(find $VMS_SCRIPT_DIR -iname "*.sh" | xargs basename -s .sh)
+basename(){
+	FILEPATH=$0
+	FULLNAME="${FILEPATH##*/}"
+	echo ${FULLNAME%.*}
+}
+
+export -f basename
+VMS_NAMES=$(find $VMS_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 
 # Build VMs
 for vm in $VMS_NAMES

@@ -14,7 +14,14 @@ source ${__dir}/"environment.inc"
 #Delete existing Images
 rm -rf $BUILD_IMAGES_DIR
 
-IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs basename -s .sh)
+basename(){
+	FILEPATH=$0
+	FULLNAME="${FILEPATH##*/}"
+	echo ${FULLNAME%.*}
+}
+
+export -f basename
+IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 
 for image in $IMAGES_NAMES
 do

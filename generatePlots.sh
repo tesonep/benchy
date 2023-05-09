@@ -11,8 +11,14 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source ${__dir}/"environment.inc"
 
+basename(){
+	FULLNAME="${$0##*/}"
+	echo ${FULLNAME%%.*}
+}
+
+export -f basename
 #Run the bench as argument, or all if argument is absent
-BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs basename -s .sh)
+BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 BENCHES_NAMES=${1-$BENCHES_NAMES}
 
 for bench in $BENCHES_NAMES

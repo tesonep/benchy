@@ -1,9 +1,4 @@
 set -e
-[[ ! -z "$DEBUG" ]] && set -x
-
-ITERATIONS=${ITERATIONS:=30}
-BENCH_NAME_WITH_EXTENSION=$(basename $0) 
-BENCH_NAME=${BENCH_NAME_WITH_EXTENSION%%.*}
 
 ARCH=$(uname -m)
 OS=$(uname -s)
@@ -13,6 +8,11 @@ BUILD_VMS_DIR=$2
 BUILD_IMAGES_DIR=$3 
 BUILD_RESULTS_DIR=$4
 DATE=$5
+BENCH_SCRIPT=$6
+
+ITERATIONS=${ITERATIONS:=30}
+BENCH_NAME_WITH_EXTENSION="${BENCH_SCRIPT##*/}"
+BENCH_NAME=${BENCH_NAME_WITH_EXTENSION%%.*}
 
 # Optional parameter. Leaving it blank if is not defined by the benchmark
 VM_PARAMETERS=${VM_PARAMETERS:=}
@@ -25,30 +25,39 @@ if [ "$OS" == "Linux" ]; then
 	VM_CMD="pharo"
 fi
 
-for image in $IMAGES
-do
-	for vm in $VMs
+
+runBenchs() {
+
+	for image in $IMAGES
 	do
-		echo "Running bench \"$BENCH_NAME\" in \"$image\" on \"$vm\""
-		mkdir -p $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
-		RESULT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.csv
-		OUT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.stdout
-		ERR_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.stderr
-
-		for (( i = 1; i <= $ITERATIONS; i++ )) 
+		for vm in $VMs
 		do
-			echo "ITERATION: $i" >> $OUT_FILE
-			echo "ITERATION: $i" >> $ERR_FILE
-			
-			FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
-			
-			echo "CMD: $FULL_COMMAND" >> $OUT_FILE
-			echo "CMD: $FULL_COMMAND" >> $ERR_FILE
+			echo "Running bench \"$BENCH_NAME\" in \"$image\" on \"$vm\""
+			mkdir -p $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
+			RESULT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.csv
+			OUT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.stdout
+			ERR_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.stderr
 
-			pushd $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm > /dev/null
-			TIMEFORMAT=%R
-			{ time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>> $RESULT_FILE && true
-			popd > /dev/null
+			for (( i = 1; i <= $ITERATIONS; i++ )) 
+			do
+				echo "ITERATION: $i" >> $OUT_FILE
+				echo "ITERATION: $i" >> $ERR_FILE
+				
+				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
+				
+				echo "CMD: $FULL_COMMAND" >> $OUT_FILE
+				echo "CMD: $FULL_COMMAND" >> $ERR_FILE
+
+				pushd $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm > /dev/null
+				TIMEFORMAT=%R
+				{ time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>> $RESULT_FILE && true
+				popd > /dev/null
+			done
 		done
 	done
-done
+}
+
+
+# Run the benchmark configuration
+# each configuration should call the runBenchs function to run
+source $BENCH_SCRIPT
