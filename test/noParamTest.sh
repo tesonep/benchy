@@ -16,7 +16,7 @@ testNoParamDeltaBlue() {
 }
 
 testNoParamFiles() {
-    assertTrue "[ -f ./_build/results/files-Pharo10-druidMirror/files-Pharo10-druidMirror-aDate.csv ]"
+    assertTrue "[ -f ./_build/results/files-Pharo10-druid/files-Pharo10-druid-aDate.csv ]"
 }
 
 testNoParamCompiler() {

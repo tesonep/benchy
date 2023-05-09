@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IMAGES="Pharo11SMark"
-VMs="latest9 latest10 druid druidMirror stack jitZero"
+VMs="latest9 latest10 druid stack jitZero"
 PHARO_CMD="eval SMarkSlopstone run: 100"
 
 runBenchs
