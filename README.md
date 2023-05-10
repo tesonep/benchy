@@ -26,6 +26,8 @@ Benchy will create a csv file with the time of the execution and two log files w
 
 It is possible to specify which directory containing benchmarks you want benchy to use. To do so, you must write `BENCHES_SCRIPT_DIR=<path to your directory> ./runAll.sh`. The path can be either relative or absolute. If not specified, `BENCHES_SCRIPT_DIR` is by default the `benchs` folder of benchy.
 
+By default, benchy runs 30 iterations of each benchmarks. It is possible to customize this by using : `ITERATIONS=<number of your choice> ./runAll.sh`. Note that if your number is 0 or less, benchy won't produce anything.
+
 # Executing your benchmars
 
 The benchmarks that are here by default are made to test the performance of Pharo. If you want to run your own benchmarks you need to:
