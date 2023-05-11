@@ -24,7 +24,6 @@ export -f basename
 #Run the bench as argument, or all if argument is absent
 BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 BENCHES_NAMES=${1-$BENCHES_NAMES}
-echo $BENCHES_NAMES
 
 for bench in $BENCHES_NAMES
 do
