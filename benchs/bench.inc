@@ -50,13 +50,12 @@ runBenchs() {
 
 				pushd $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm > /dev/null
 				TIMEFORMAT=%R
-				{ time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>> $RESULT_FILE && true
+				RES="$( { time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>&1 )" && true
 				
 				if [ $? == 0 ]; then
-					echo "ok" >> $RESULT_FILE
+					echo -e "OK\t$RES" >> $RESULT_FILE
 				else
-					echo "error" >> $RESULT_FILE
-					echo $( tail -n 1 $ERR_FILE ) >> $RESULT_FILE
+					echo -e "ERROR\t$RES" >> $RESULT_FILE
 				fi
 				
 				popd > /dev/null

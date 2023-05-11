@@ -32,3 +32,6 @@ jobs:
 
     - name: absolute path test
       run: cd ./benchy; bash ./test/absolutePathTest.sh
+
+    - name: error test
+      run: cd ./benchy; bash ./test/errorTest.sh
