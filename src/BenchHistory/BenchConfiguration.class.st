@@ -65,11 +65,11 @@ BenchConfiguration >> computeTimeAveragePerDay [
 	^ datapoints collect: [ :e |
 		  | times average stdev |
 		  times := (NeoCSVReader on: e readStream)
-			           separator: Character tab;
-			           fieldCount: 2;
-						  addField;
-			           addFloatField;
-						  select: [ :each | (each at:1) = 'OK' ].
+							separator: Character tab;
+							fieldCount: 2;
+							addField;
+							addFloatField;
+							select: [ :each | (each at:1) = 'OK' ].
 		  times := times collect: #second.
 		  times
 			  ifEmpty: [
