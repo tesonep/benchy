@@ -66,8 +66,11 @@ You can create your own benchmark configuration by creating a `.sh` file using t
 ```bash
 #!/bin/bash
 
+# Configuration
 IMAGES="<the images you want your benchmark to run in>"
 VMs="<the VMs you want your benchmark to run with>"
+
+# Command
 PHARO_CMD="<the command you want the VM to execute>"
 
 runBenchs
@@ -94,6 +97,9 @@ runBenchs
 # Second configuration
 IMAGES="<other images>"
 VMs="<other VMs>"
+
+# Iterations
+ITERATIONS=3
 
 # Run
 runBenchs
