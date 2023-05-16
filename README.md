@@ -109,6 +109,25 @@ runBenchs
 
 Be sure not to forget to rewrite `runBenchs` so that the benchmark reruns with the new images and/or VMs.
 
+If the command you want to execute in your benchmark requires the current iteration index, for example if your command's behaviour depends on the index parity, you should do as follows :
+
+```bash
+#!/bin/bash
+
+# Configuration
+IMAGES="<the images you want your benchmark to run in>"
+VMs="<the VMs you want your benchmark to run with>"
+
+# First part of the command
+CMD_START="<first part of the command you want the VM to execute>"
+
+# Second part of the command
+CMD_END="<second part of the command you want the VM to execute>"
+
+# Run
+runBenchs
+```
+
 # Depedencies
 
 In order to run `benchParamTest.sh`, you need to download [shunit2](https://github.com/kward/shunit2) and add the path to the `shunit2` file to your `PATH`.

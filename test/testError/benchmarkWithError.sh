@@ -2,18 +2,9 @@
 
 IMAGES="Pharo11"
 VMs="latest10"
-PHARO_CMD="nil"
-
-runBenchs
-
-PHARO_CMD="eval 1+1"
-
-runBenchs
-
-PHARO_CMD="nil"
-
-runBenchs
-
-PHARO_CMD="eval 1+1"
+ITERATIONS=4
+# CMD_START="eval ("
+# CMD_END=" \\\\ 2) == 0 ifFalse: [ self error ]"
+CMD="eval (ITERATION \\\\ 2) == 0 ifFalse: [ self error ]"
 
 runBenchs
