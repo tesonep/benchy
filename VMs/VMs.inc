@@ -24,6 +24,11 @@ if [ "$OS" == "Linux" ]; then
 	VM_CMD="pharo"
 fi
 
+if [ "$OS"=="MINGW64_NT-*" ]; then
+	VM_CMD="PharoConsole.exe"
+	OS="Windows"
+fi
+
 function downloadVM(){
 	
 	URL=$1

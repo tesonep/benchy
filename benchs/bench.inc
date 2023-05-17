@@ -45,6 +45,8 @@ runBenchs() {
 				echo "ITERATION: $i" >> $OUT_FILE
 				echo "ITERATION: $i" >> $ERR_FILE
 
+				# This line is for commands that need the current iteration index. It expands ITERATION in the original command.
+				# It does nothing to commands that don't need the current iteration index.
 				local EXPANDED_PHARO_CMD=`echo $PHARO_CMD | ITERATION=$ITERATION envsubst`
 
 				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $EXPANDED_PHARO_CMD"
