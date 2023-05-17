@@ -6,9 +6,9 @@ oneTimeSetUp() {
 }
 
 # After all tests, the results files are removed
-# oneTimeTearDown() {
-#     rm -rf ./_build/results
-# }
+oneTimeTearDown() {
+    rm -rf ./_build/results
+}
 
 # Test if the line in the csv file starts with "OK"
 testLine1IsError() {
