@@ -6,28 +6,28 @@ oneTimeSetUp() {
 }
 
 # After all tests, the results files are removed
-oneTimeTearDown() {
-    rm -rf ./_build/results
-}
+# oneTimeTearDown() {
+#     rm -rf ./_build/results
+# }
 
 # Test if the line in the csv file starts with "OK"
 testLine1IsError() {
-    local line=$( sed '1q;d' ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv )
+    local line=$(tail -4 ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv | head -1)
     assertTrue '[[ "$line" == ERROR* ]]'
 }
 
 testLine2IsOk() {
-    local line=$( sed '2q;d' ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv )
+    local line=$(tail -3 ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv | head -1)
     assertTrue '[[ "$line" == OK* ]]'
 }
 
 testLine3IsError() {
-    local line=$( sed '3q;d' ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv )
+    local line=$(tail -2 ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv | head -1)
     assertTrue '[[ "$line" == ERROR* ]]'
 }
 
 testLine4IsOk() {
-    local line=$( sed '4q;d' ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv )
+    local line=$(tail -1 ./_build/results/benchmarkWithError-Pharo11-latest10/benchmarkWithError-Pharo11-latest10-aDate.csv)
     assertTrue '[[ "$line" == OK* ]]'
 }
 

@@ -1,5 +1,3 @@
-set -e
-
 ARCH=$(uname -m)
 OS=$(uname -s)
 
@@ -26,7 +24,7 @@ if [ "$OS" == "Linux" ]; then
 fi
 
 if [ "$OS"=="MINGW64_NT-10.0-*" ]; then
-	VM_CMD="Pharo.exe"
+	VM_CMD="PharoConsole.exe"
 fi
 
 runBenchs() {
@@ -47,14 +45,9 @@ runBenchs() {
 				echo "ITERATION: $i" >> $OUT_FILE
 				echo "ITERATION: $i" >> $ERR_FILE
 
-				# For commands that require the current iteration index
-				# if [ -n "$CMD_START" ] && [ -n "$CMD_END" ]; then
-				# 	PHARO_CMD="$CMD_START$ITERATION$CMD_END"
-				# fi
+				local EXPANDED_PHARO_CMD=`echo $PHARO_CMD | ITERATION=$ITERATION envsubst`
 
-				PHARO_CMD=${CMD//ITERATION/$ITERATION}
-
-				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
+				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $EXPANDED_PHARO_CMD"
 				
 				echo "CMD: $FULL_COMMAND" >> $OUT_FILE
 				echo "CMD: $FULL_COMMAND" >> $ERR_FILE
