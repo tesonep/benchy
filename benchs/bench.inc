@@ -1,3 +1,5 @@
+set -e
+
 ARCH=$(uname -m)
 OS=$(uname -s)
 
