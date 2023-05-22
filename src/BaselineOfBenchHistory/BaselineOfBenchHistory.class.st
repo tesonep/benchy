@@ -13,7 +13,9 @@ BaselineOfBenchHistory >> baseline: spec [
 			spec
 				"Dependencies"
 				baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ];
-				baseline: 'Roassal3' with: [ spec repository: 'github://ObjectProfile/Roassal3/src' ];
+				baseline: 'Roassal3' with: [ spec
+					repository: 'github://ObjectProfile/Roassal3';
+					load: 'Full' ];
 				
 				"Package"
 				package: 'BenchHistory'
