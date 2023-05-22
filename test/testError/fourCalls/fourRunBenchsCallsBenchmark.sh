@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This benchmark is used in errorTest.sh.
+# This benchmark is used in fourCallsErrorTest.sh.
 
 IMAGES="Pharo11"
 VMs="latest10"
