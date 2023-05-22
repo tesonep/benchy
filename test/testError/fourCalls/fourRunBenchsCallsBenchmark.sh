@@ -4,7 +4,6 @@
 
 IMAGES="Pharo11"
 VMs="latest10"
-ITERATION=1
 
 # Command that fails
 PHARO_CMD="nil"
