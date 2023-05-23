@@ -11,7 +11,6 @@ oneTimeSetUp() {
 
 # After all tests, the results files are removed
 oneTimeTearDown() {
-    cat ./_build/results/fourRunBenchsCallsBenchmark-Pharo11-latest10/fourRunBenchsCallsBenchmark-Pharo11-latest10-aDate.stderr
     rm -rf ./_build/results
 }
 

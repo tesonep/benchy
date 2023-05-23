@@ -24,14 +24,14 @@ jobs:
     - name: add in path
       run: echo "`pwd`/shunit2" >> $GITHUB_PATH
 
-    # - name: no param test
-    #   run: cd ./benchy; bash ./test/defaultParamTest.sh
+    - name: no param test
+      run: cd ./benchy; bash ./test/defaultParamTest.sh
 
-    # - name: relative path test
-    #   run: cd ./benchy; bash ./test/relativePathTest.sh
+    - name: relative path test
+      run: cd ./benchy; bash ./test/relativePathTest.sh
 
-    # - name: absolute path test
-    #   run: cd ./benchy; bash ./test/absolutePathTest.sh
+    - name: absolute path test
+      run: cd ./benchy; bash ./test/absolutePathTest.sh
 
     - name: four calls error test
       run: cd ./benchy; bash ./test/fourCallsErrorTest.sh
