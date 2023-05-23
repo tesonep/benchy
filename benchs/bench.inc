@@ -25,7 +25,7 @@ if [ "$OS" == "Linux" ]; then
 	VM_CMD="pharo"
 fi
 
-if [[ "$OS" == MINGW64_NT-10.0-* ]]; then
+if [[ "$OS" == MINGW64_NT-* ]]; then
 	VM_CMD="PharoConsole.exe"
 fi
 
