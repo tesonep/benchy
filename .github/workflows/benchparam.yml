@@ -33,5 +33,8 @@ jobs:
     - name: absolute path test
       run: cd ./benchy; bash ./test/absolutePathTest.sh
 
-    - name: error test
-      run: cd ./benchy; bash ./test/errorTest.sh
+    - name: four calls error test
+      run: cd ./benchy; bash ./test/fourCallsErrorTest.sh
+    
+    - name: four iterations error test
+      run: cd ./benchy; bash ./test/fourIterationsErrorTest.sh

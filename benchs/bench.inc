@@ -25,6 +25,9 @@ if [ "$OS" == "Linux" ]; then
 	VM_CMD="pharo"
 fi
 
+if [[ "$OS" == MINGW64_NT-* ]]; then
+	VM_CMD="PharoConsole.exe"
+fi
 
 runBenchs() {
 
@@ -40,10 +43,15 @@ runBenchs() {
 
 			for (( i = 1; i <= $ITERATIONS; i++ )) 
 			do
+				local ITERATION=$i
 				echo "ITERATION: $i" >> $OUT_FILE
 				echo "ITERATION: $i" >> $ERR_FILE
-				
-				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $PHARO_CMD"
+
+				# Expand $ITERATION in the command for benchmarks requiring the current iteration
+				# It does nothing to commands that don't need the current iteration index.
+				local EXPANDED_PHARO_CMD=`echo $PHARO_CMD | ITERATION=$ITERATION envsubst`
+
+				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $EXPANDED_PHARO_CMD"
 				
 				echo "CMD: $FULL_COMMAND" >> $OUT_FILE
 				echo "CMD: $FULL_COMMAND" >> $ERR_FILE
