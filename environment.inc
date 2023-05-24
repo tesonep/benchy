@@ -9,8 +9,6 @@ set -o nounset
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-
-
 VMS_SCRIPT_DIR=${__dir}/VMs
 IMAGES_SCRIPT_DIR=${__dir}/images
 
