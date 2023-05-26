@@ -1,16 +1,23 @@
-# Benchy
+# Table of Contents
+
+- [Description](#description)
+- [Benchmark Definition](#benchmark-definition)
+- [Quick Start](#quick-start)
+    - [Running all benchmarks](#running-all-benchmarks)
+    - [Running options](#running-options)
+    - [Output](#output)
+- [Running your own benchmarks](#running-your-own-benchmarks)
+    - [Parameters](#parameters)
+    - [Executing your benchmars](#executing-your-benchmark) 
+    - [Create your own configuration](#create-your-own-configuration)
+- [Depedencies](#depedencies)
+- [More info](#more-info)
+
+# Description
 
 Hello, I am an electric benchy, I can't go very fast or very far and if you drive me people will think you are awesome.
 
-# Quick Start
-
-I am a framework for doing benchmarks in Pharo. 
-
-Just run the `runAll.sh` script. That will:
-
-1. Download all the pharo images that are defined in the `/images` folder
-2. Then it will built the vms defined in the `/vms` folder
-3. then it will run the benchmarks defined in the `benchs` folder
+## Benchmark Definition
 
 Each benchmark defines basically:
 
@@ -20,9 +27,41 @@ Each benchmark defines basically:
 
 One benchmark can be run on several images with several vms. Benchy will take care of that, you only need to specify the configuration.
 
+# Quick Start
+
+I am a framework for doing benchmarks in Pharo. 
+
+## Running all benchmarks
+
+Just run the `runAll.sh` script. That will:
+
+1. Download all the pharo images that are defined in the `/images` folder
+2. Then it will built the vms defined in the `/vms` folder
+3. then it will run the benchmarks defined in the `benchs` folder
+
+## Running options
+
+Running `run.sh` will list options to run benchmarks.
+
+To list the available benchmarks
+`./run.sh list`
+
+To run specific benchmarks in all images and all VMs
+```bash
+./run.sh bench slopstone
+./run.sh bench richards
+```
+
+To plot existing results
+`./run.sh bench plot`
+
+## Output
+
 Benchy will create a csv file with the time of the execution and two log files with the logs that happened during the execution. In your Pharo code you can to `anObj trace` to leave traces.
 
-# Parameters
+# Running your own benchmarks
+
+## Parameters
 
 It is possible to specify which directory containing benchmarks you want benchy to use. To do so, you must write `BENCHES_SCRIPT_DIR=<path to your directory> ./runAll.sh`. The path can be either relative or absolute. If not specified, `BENCHES_SCRIPT_DIR` is by default the `benchs` folder of benchy.
 
@@ -52,7 +91,7 @@ Note that if your number is 0 or less, benchy won't produce anything.
 You can also add VM options when running `runAll.sh` with `VM_PARAMETERS=<parameter> ./runAll.sh`.  
 Those options are available with `<vm> --help`. Like `ITERATIONS`, you can specify them locally. 
 
-# Executing your benchmars
+## Executing your benchmars
 
 The benchmarks that are here by default are made to test the performance of Pharo. If you want to run your own benchmarks you need to:
 
@@ -60,7 +99,7 @@ The benchmarks that are here by default are made to test the performance of Phar
 2. [Optional] Add a `.sh` file in the `/vms` folder with the instructions to download your vm. If not you can use one of the already present vms.
 3. Execute `runBenchs.sh name_of_your_benchmark` with the name.s of your benchmark.s
 
-# Create your own configuration
+## Create your own configuration
 
 You can create your own benchmark configuration by creating a `.sh` file using the following template:
 
