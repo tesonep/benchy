@@ -10,7 +10,8 @@
     - [Parameters](#parameters)
     - [Executing your benchmars](#executing-your-benchmark) 
     - [Create your own configuration](#create-your-own-configuration)
-- [Depedencies](#depedencies)
+- [Dependencies](#dependencies)
+    - [Pharo Installation](#pharo-installation)
 - [More info](#more-info)
 
 # Description
@@ -148,9 +149,19 @@ runBenchs
 
 Be sure not to forget to rewrite `runBenchs` so that the benchmark reruns with the new images and/or VMs.
 
-# Depedencies
+# Dependencies
 
 In order to run `benchParamTest.sh`, you need to download [shunit2](https://github.com/kward/shunit2) and add the path to the `shunit2` file to your `PATH`.
+
+## Pharo Installation
+
+```smalltalk
+EpMonitor disableDuring: [ 
+	Metacello new
+		baseline: 'BenchHistory';
+		repository: 'github://tesonep/benchy:main';
+		load ]
+```
 
 # More info
 
