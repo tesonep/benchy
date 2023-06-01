@@ -30,16 +30,16 @@ if [[ "$OS" == MINGW64_NT-* ]]; then
 fi
 
 runBenchs() {
-
 	for image in $IMAGES
 	do
 		for vm in $VMs
 		do
 			echo "Running bench \"$BENCH_NAME\" in \"$image\" on \"$vm\" for ${ITERATIONS} iterations"
-			mkdir -p $BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
-			RESULT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.csv
-			OUT_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.stdout
-			ERR_FILE=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm/$BENCH_NAME-$image-$vm-$DATE.stderr
+			RESULT_DIR=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
+			mkdir -p $RESULT_DIR
+			RESULT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.csv
+			OUT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stdout
+			ERR_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stderr
 
 			for (( i = 1; i <= $ITERATIONS; i++ )) 
 			do
@@ -47,9 +47,16 @@ runBenchs() {
 				echo "ITERATION: $i" >> $OUT_FILE
 				echo "ITERATION: $i" >> $ERR_FILE
 
-				# Expand $ITERATION in the command for benchmarks requiring the current iteration
-				# It does nothing to commands that don't need the current iteration index.
-				local EXPANDED_PHARO_CMD=`echo $PHARO_CMD | ITERATION=$ITERATION envsubst`
+				if [ "$BEFORE_CMD" ]; then
+					local EXPANDED_BEFORE_CMD=`echo $BEFORE_CMD | RESULT_DIR=$RESULT_DIR ITERATION=$ITERATION envsubst`
+					echo "CMD: $EXPANDED_BEFORE_CMD" >> $OUT_FILE
+					echo "CMD: $EXPANDED_BEFORE_CMD" >> $ERR_FILE
+					$EXPANDED_BEFORE_CMD 1>>$OUT_FILE 2>>$ERR_FILE && true
+				fi
+
+				# Expand variables in the command for benchmarks.
+				# It does nothing to commands that don't need them.
+				local EXPANDED_PHARO_CMD=`echo $PHARO_CMD | RESULT_DIR=$RESULT_DIR ITERATION=$ITERATION envsubst`
 
 				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $EXPANDED_PHARO_CMD"
 				
@@ -64,6 +71,14 @@ runBenchs() {
 					echo -e "OK\t$RES" >> $RESULT_FILE
 				else
 					echo -e "ERROR\t$RES" >> $RESULT_FILE
+				fi
+
+
+				if [ "$AFTER_CMD" ]; then
+					local EXPANDED_AFTER_CMD=`echo $AFTER_CMD | RESULT_DIR=$RESULT_DIR ITERATION=$ITERATION envsubst`
+					echo "CMD: $EXPANDED_AFTER_CMD" >> $OUT_FILE
+					echo "CMD: $EXPANDED_AFTER_CMD" >> $ERR_FILE
+					$EXPANDED_AFTER_CMD 1>>$OUT_FILE 2>>$ERR_FILE && true
 				fi
 				
 				popd > /dev/null
