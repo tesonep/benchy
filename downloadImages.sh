@@ -9,10 +9,10 @@ set -o nounset
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-source ${__dir}/"environment.inc"
+export -f basename
+IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 
-#Delete existing Images
-rm -rf $BUILD_IMAGES_DIR
+source ${__dir}/"environment.inc"
 
 basename(){
 	FILEPATH=$0
@@ -20,11 +20,16 @@ basename(){
 	echo ${FULLNAME%.*}
 }
 
-export -f basename
-IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
+# Lazy downloading of images, if image already exists, do not download again
+download_pharo_images () {
+	for image in $IMAGES_NAMES; do
+		if [ ! -f "$image" ]; then
+			printf "Downloading image %s\n" $image
+			bash $IMAGES_SCRIPT_DIR/$image.sh $IMAGES_SCRIPT_DIR $BUILD_IMAGES_DIR
+		else
+			printf "Image already downloaded\n"
+		fi
+	done
+}
 
-for image in $IMAGES_NAMES
-do
-	echo "Downloading image $image"
-	bash $IMAGES_SCRIPT_DIR/$image.sh $IMAGES_SCRIPT_DIR $BUILD_IMAGES_DIR
-done
+download_pharo_images
