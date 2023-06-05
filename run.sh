@@ -19,11 +19,6 @@ download_images () {
     benchy_log "Finished downloading images"
 }
 
-# Delete existing Images
-delete_images () {
-	rm -rf $BUILD_IMAGES_DIR
-	benchy_log "Images deleted successfully\n"
-}
 
 parse_cmd_line () {
 	case "$1" in
@@ -41,6 +36,9 @@ parse_cmd_line () {
 			;;
 		delete_images )
 			delete_images
+			;;
+		delete_vms )
+			delete_vms
 			;;
         bench )
             bench ${@}

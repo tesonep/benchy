@@ -12,7 +12,9 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source ${__dir}/"environment.inc"
 
 # Delete existing VMs
-rm -rf $BUILD_VMS_DIR
+delete_vms () {
+	rm -rf $BUILD_VMS_DIR
+}
 
 basename(){
 	FILEPATH=$0
@@ -24,8 +26,9 @@ export -f basename
 VMS_NAMES=$(find $VMS_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 
 # Build VMs
-for vm in $VMS_NAMES
-do
-	echo "Building VM $vm"
-	bash $VMS_SCRIPT_DIR/$vm.sh $VMS_SCRIPT_DIR $BUILD_VMS_DIR $BUILD_REPOS_DIR
+for vm in $VMS_NAMES; do
+	if [ ! -d "$BUILD_VMS_DIR/$vm" ]; then
+		echo "Building VM $vm"
+		bash $VMS_SCRIPT_DIR/$vm.sh $VMS_SCRIPT_DIR $BUILD_VMS_DIR $BUILD_REPOS_DIR
+	fi
 done

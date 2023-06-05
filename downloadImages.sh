@@ -18,6 +18,13 @@ basename(){
 	echo ${FULLNAME%.*}
 }
 
+# Delete existing Images
+delete_images () {
+	rm -rf $BUILD_IMAGES_DIR
+	benchy_log "Images deleted successfully\n"
+}
+
+
 export -f basename
 IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 
