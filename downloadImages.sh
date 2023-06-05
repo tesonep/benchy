@@ -9,9 +9,6 @@ set -o nounset
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-export -f basename
-IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
-
 source ${__dir}/"environment.inc"
 
 basename(){
@@ -19,6 +16,9 @@ basename(){
 	FULLNAME="${FILEPATH##*/}"
 	echo ${FULLNAME%.*}
 }
+
+export -f basename
+IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
 
 # Lazy downloading of images, if image already exists, do not download again
 download_pharo_images () {
