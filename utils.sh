@@ -52,6 +52,7 @@ The options include:
 	plot			Plot benchmark results.
 	examples		Show usage examples.
 	download_images Download images specified in ${BUILD_IMAGES_DIR}.
+	delete_images	Remove images specified in ${BUILD_IMAGES_DIR}.
 	list			List available Pharo benchmarks.
 	run			Run a Pharo Image.
 

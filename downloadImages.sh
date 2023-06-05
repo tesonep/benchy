@@ -9,6 +9,7 @@ set -o nounset
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+source ${__dir}/"utils.sh"
 source ${__dir}/"environment.inc"
 
 basename(){
@@ -22,13 +23,13 @@ IMAGES_NAMES=$(find $IMAGES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basena
 
 # Lazy downloading of images, if image already exists, do not download again
 download_pharo_images () {
-	printf "Downloading pharo images\n"
+	benchy_log "Downloading pharo images\n"
 	for image in $IMAGES_NAMES; do
 		if [ ! -d "$BUILD_IMAGES_DIR/$image" ]; then
-			printf "Downloading image %s\n" $image
+			benchy_log "Downloading image %s\n" $image
 			bash $IMAGES_SCRIPT_DIR/$image.sh $IMAGES_SCRIPT_DIR $BUILD_IMAGES_DIR
 		else
-			printf "Image already downloaded %s\n" $image
+			benchy_log  "$image" "Image already downloaded\n"
 		fi
 	done
 }

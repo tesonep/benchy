@@ -22,6 +22,7 @@ download_images () {
 # Delete existing Images
 delete_images () {
 	rm -rf $BUILD_IMAGES_DIR
+	benchy_log "Images deleted successfully\n"
 }
 
 parse_cmd_line () {
