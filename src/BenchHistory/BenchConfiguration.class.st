@@ -70,11 +70,11 @@ BenchConfiguration >> computeTimeAveragePerDay [
 			            addField;
 			            addFloatField;
 			            select: [ :each | each first = 'OK' ]) collect: #second.
-		  times
-			  ifEmpty: [
+		  times size < 2
+			  ifTrue: [
 				  average := 0.
 				  stdev := 0 ]
-			  ifNotEmpty: [
+			  ifFalse: [
 				  average := times average.
 				  stdev := times stdev ].
 
@@ -171,8 +171,9 @@ BenchConfiguration >> timesForDate: aDate [
 	file := self root fileReference / configName
 	        / (configName , '-' , aDate) , 'csv'.
 	^ (NeoCSVReader on: file readStream)
-		  separator: Character cr;
+		  separator: Character tab;
 		  fieldCount: 1;
+		  addField;
 		  addFloatField;
-		  collect: #first
+		  collect: #second
 ]
