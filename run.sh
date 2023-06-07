@@ -19,6 +19,7 @@ download_images () {
     benchy_log "Finished downloading images"
 }
 
+
 parse_cmd_line () {
 	case "$1" in
 		clean )
@@ -32,6 +33,12 @@ parse_cmd_line () {
 			;;
 		download_images )
 			download_images
+			;;
+		delete_images )
+			delete_images
+			;;
+		delete_vms )
+			delete_vms
 			;;
         bench )
             bench ${@}
