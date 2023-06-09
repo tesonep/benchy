@@ -12,12 +12,7 @@ pushd $BUILD_IMAGES_DIR/$NAME/vm > /dev/null
 
 wget -O - get.pharo.org/vm110 | bash
 
-echo "Metacello new
-		baseline: 'SMark';
-		repository: 'github://guillep/SMark';
-		load." > script.st
-
-./pharo ../oldFormat.image st --quit --save script.st
+./pharo ../oldFormat.image st --quit --save loadSMark.st
 
 popd  > /dev/null
 
