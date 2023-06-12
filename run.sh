@@ -19,6 +19,9 @@ download_images () {
     benchy_log "Finished downloading images"
 }
 
+generate_config () {
+	jsonnet config_templates/base.jsonnet'
+}
 
 parse_cmd_line () {
 	case "$1" in
