@@ -29,6 +29,19 @@ if [[ "$OS" == MINGW64_NT-* ]]; then
 	VM_CMD="PharoConsole.exe"
 fi
 
+# Write benchmark status to a results file
+writeStatus() {
+	local status="$1"
+	local reqIterations="$2"
+	local benchmark="$3"
+	local imageName="$4"
+	local vmName="$5"
+	local date=$(date +%d-%m-%Y" "%H:%M:%S)
+	local resultFile="$6"
+
+	printf "status=%s,req_iterations=%s,date=%s,benchmark=%s,image_name=%s,vm_name=%s\n" "$status" "$reqIterations" "$date" "$benchmark" "$imageName" "$vmName">> "$resultFile"
+}
+
 runBenchs() {
 	for image in $IMAGES
 	do
@@ -68,9 +81,9 @@ runBenchs() {
 				RES="$( { time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>&1 )" && true
 				
 				if [ $? == 0 ]; then
-					echo -e "OK\t$RES" >> $RESULT_FILE
+					writeStatus("OK",$ITERATIONS,$BENCH_NAME,$image,$vm_name,$RESULT_FILE)
 				else
-					echo -e "ERROR\t$RES" >> $RESULT_FILE
+					writeStatus("ERROR",$ITERATIONS,$BENCH_NAME,$image,$vm_name,$RESULT_FILE)
 				fi
 
 
