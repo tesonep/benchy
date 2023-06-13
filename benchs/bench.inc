@@ -39,10 +39,12 @@ writeStatus() {
 	local currentDate
 	local currentTime
 	local resultFile="$6"
+	local outFile="$7"
+	local errFile="$8"
 
 	currentDate=$(date +%d-%m-%Y)
-	currentTime=$(date %H:%M:%S)
-	printf "status=%s,req_iterations=%s,date=%s,time=%s,benchmark=%s,image_name=%s,vm_name=%s\n" "$status" "$reqIterations" "$currentDate" "$currentTime" "$benchmark" "$imageName" "$vmName">> "$resultFile"
+	currentTime=$(date +%H:%M:%S)
+	printf "status=%s,req_iterations=%s,date=%s,time=%s,benchmark=%s,image_name=%s,vm_name=%s,output_file=%s,err_file=%s\n" "$status" "$reqIterations" "$currentDate" "$currentTime" "$benchmark" "$imageName" "$vmName" "$outFile" "$errFile" >> "$resultFile"
 }
 
 runBenchs() {
@@ -53,21 +55,22 @@ runBenchs() {
 			echo "Running bench \"$BENCH_NAME\" in \"$image\" on \"$vm\" for ${ITERATIONS} iterations"
 			RESULT_DIR=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
 			mkdir -p "$RESULT_DIR"
-			RESULT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.csv
+			# RESULT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.csv
+			RESULT_FILE="$BUILD_RESULTS_DIR"/"benchy-runs.csv"
 			OUT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stdout
 			ERR_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stderr
 
 			for (( i = 1; i <= $ITERATIONS; i++ )) 
 			do
 				local ITERATION=$i
-				echo "ITERATION: $i" >> $OUT_FILE
-				echo "ITERATION: $i" >> $ERR_FILE
+				echo "ITERATION: $i" >> "$OUT_FILE"
+				echo "ITERATION: $i" >> "$ERR_FILE"
 
 				if [ "$BEFORE_CMD" ]; then
 					local EXPANDED_BEFORE_CMD=$(echo $BEFORE_CMD | RESULT_DIR=$RESULT_DIR ITERATION=$ITERATION envsubst)
 					echo "CMD: $EXPANDED_BEFORE_CMD" >> $OUT_FILE
 					echo "CMD: $EXPANDED_BEFORE_CMD" >> $ERR_FILE
-					$EXPANDED_BEFORE_CMD 1>>$OUT_FILE 2>>$ERR_FILE && true
+					$EXPANDED_BEFORE_CMD 1>>"$OUT_FILE" 2>>"$ERR_FILE" && true
 				fi
 
 				# Expand variables in the command for benchmarks.
@@ -81,12 +84,12 @@ runBenchs() {
 
 				pushd "$BUILD_RESULTS_DIR"/"$BENCH_NAME"-"$image"-"$vm" > /dev/null
 				TIMEFORMAT=%R
-				RES="$( { time $FULL_COMMAND 1>>$OUT_FILE 2>> $ERR_FILE ; } 2>&1 )" && true
+				RES="$( { time $FULL_COMMAND 1>>"$OUT_FILE" 2>> "$ERR_FILE" ; } 2>&1 )" && true
 				
 				if [ $? == 0 ]; then
-					writeStatus "OK" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE"
+					writeStatus "OK" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE" "$OUT_FILE" "$ERR_FILE"
 				else
-					writeStatus "ERROR" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE"
+					writeStatus "ERROR" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE" "$OUT_FILE" "$ERR_FILE"
 				fi
 
 				if [ "$AFTER_CMD" ]; then
@@ -107,4 +110,4 @@ runBenchs() {
 
 # Run the benchmark configuration
 # each configuration should call the runBenchs function to run
-source $BENCH_SCRIPT
+source "$BENCH_SCRIPT"
