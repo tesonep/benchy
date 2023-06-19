@@ -19,7 +19,6 @@ download_images () {
     benchy_log "Finished downloading images"
 }
 
-
 parse_cmd_line () {
 	case "$1" in
 		clean )
