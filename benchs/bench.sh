@@ -47,6 +47,12 @@ writeStatus() {
 }
 
 runBenchs() {
+	local result_file
+
+	result_file="$BUILD_RESULTS_DIR"/"benchy-runs.csv"
+	echo "#datatype measurement,tag,double:,.,tag,tag,tag,tag,tag,dateTime:RFC3339" > "$result_file"
+	echo "benchmark,status,duration,req_iterations,image_name,vm_name,output_file,err_file,time" >> "$result_file"
+
 	for image in $IMAGES
 	do
 		for vm in $VMs
@@ -55,7 +61,6 @@ runBenchs() {
 			RESULT_DIR=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
 			mkdir -p "$RESULT_DIR"
 			# RESULT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.csv
-			RESULT_FILE="$BUILD_RESULTS_DIR"/"benchy-runs.csv"
 			OUT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stdout
 			ERR_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stderr
 
@@ -86,9 +91,9 @@ runBenchs() {
 				RES="$( { time $FULL_COMMAND 1>>"$OUT_FILE" 2>> "$ERR_FILE" ; } 2>&1 )" && true
 				
 				if [ $? == 0 ]; then
-					writeStatus "OK" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE" "$OUT_FILE" "$ERR_FILE" "$RES"
+					writeStatus "OK" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$result_file" "$OUT_FILE" "$ERR_FILE" "$RES"
 				else
-					writeStatus "ERROR" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE" "$OUT_FILE" "$ERR_FILE" "$RES"
+					writeStatus "ERROR" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$result_file" "$OUT_FILE" "$ERR_FILE" "$RES"
 				fi
 
 				if [ "$AFTER_CMD" ]; then
