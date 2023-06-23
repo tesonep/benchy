@@ -3,7 +3,7 @@
 # Before any test, this command is executed
 oneTimeSetUp() {
     result_file="./_build/results/benchy-runs.csv"
-    ITERATIONS=1 BENCHES_SCRIPT_DIR=$(pwd)/test/testConfiguration ./runAll.sh aDate
+    ITERATIONS=1 BENCHES_SCRIPT_DIR=$(pwd)/test/testConfiguration ./runAll.sh
 }
 
 # After all tests, the results files are removed

@@ -13,50 +13,53 @@ BENCH_SCRIPT=$6
 ITERATIONS=${ITERATIONS:=30}
 BENCH_NAME_WITH_EXTENSION="${BENCH_SCRIPT##*/}"
 BENCH_NAME=${BENCH_NAME_WITH_EXTENSION%%.*}
+date_cmd="date"
 
 # Optional parameter. Leaving it blank if is not defined by the benchmark
 VM_PARAMETERS=${VM_PARAMETERS:=}
 
-if [ "$OS" == "Darwin" ]; then
-	VM_CMD="Pharo.app/Contents/MacOS/Pharo"
-fi
+setPlatformOptions() {
+	if [ "$OS" == "Darwin" ]; then
+		VM_CMD="Pharo.app/Contents/MacOS/Pharo"
+		date_cmd="gdate"
+	elif [ "$OS" == "Linux" ]; then
+		VM_CMD="pharo"
+	elif [ "$OS" == "MINGW64_NT-*" ]; then
+		VM_CMD="PharoConsole.exe"
+	fi
+}
 
-if [ "$OS" == "Linux" ]; then
-	VM_CMD="pharo"
-fi
-
-if [[ "$OS" == MINGW64_NT-* ]]; then
-	VM_CMD="PharoConsole.exe"
-fi
-
-# Write benchmark status to a results file
+# Write benchmark results to file
 writeStatus() {
 	local status="$1"
 	local reqIterations="$2"
 	local benchmark="$3"
 	local imageName="$4"
 	local vmName="$5"
-	local currentDate
-	local currentTime
-	local resultFile="$6"
-	local outFile="$7"
-	local errFile="$8"
+	local outFile="$6"
+	local errFile="$7"
+	local duration="$8"
 
-	currentDate=$(date +%d-%m-%Y)
-	currentTime=$(date +%H:%M:%S)
-	printf "status=%s,req_iterations=%s,date=%s,time=%s,benchmark=%s,image_name=%s,vm_name=%s,output_file=%s,err_file=%s\n" "$status" "$reqIterations" "$currentDate" "$currentTime" "$benchmark" "$imageName" "$vmName" "$outFile" "$errFile" >> "$resultFile"
+	currentTimestamp=$("$date_cmd" -u +"%Y-%m-%dT%H:%M:%SZ")
+
+	printf "%s,%s,%s,%s,%s,%s,%s,%s,%s\n" "$benchmark" "$status" "$duration" "$reqIterations" "$imageName" "$vmName" "$outFile" "$errFile" "$currentTimestamp" >> "$result_file"
 }
 
 runBenchs() {
+	setPlatformOptions
+	[ -d "$BUILD_RESULTS_DIR" ] ||  mkdir "$BUILD_RESULTS_DIR"
+
 	for image in $IMAGES
 	do
 		for vm in $VMs
 		do
 			echo "Running bench \"$BENCH_NAME\" in \"$image\" on \"$vm\" for ${ITERATIONS} iterations"
+
+			# Ensure result directory exist (with parent) for this iteration
 			RESULT_DIR=$BUILD_RESULTS_DIR/$BENCH_NAME-$image-$vm
 			mkdir -p "$RESULT_DIR"
+
 			# RESULT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.csv
-			RESULT_FILE="$BUILD_RESULTS_DIR"/"benchy-runs.csv"
 			OUT_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stdout
 			ERR_FILE=$RESULT_DIR/$BENCH_NAME-$image-$vm-$DATE.stderr
 
@@ -77,19 +80,22 @@ runBenchs() {
 				# It does nothing to commands that don't need them.
 				local EXPANDED_PHARO_CMD=$(echo $PHARO_CMD | RESULT_DIR=$RESULT_DIR ITERATION=$ITERATION envsubst)
 
-				FULL_COMMAND="$BUILD_VMS_DIR/$vm/$VM_CMD $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $EXPANDED_PHARO_CMD"
+				vm_exe_path=$BUILD_VMS_DIR/$vm/$VM_CMD
+				FULL_COMMAND="$vm_exe_path $VM_PARAMETERS $BUILD_IMAGES_DIR/$image/$image.image $EXPANDED_PHARO_CMD"
 				
 				echo "CMD: $FULL_COMMAND" >> $OUT_FILE
 				echo "CMD: $FULL_COMMAND" >> $ERR_FILE
 
 				pushd "$BUILD_RESULTS_DIR"/"$BENCH_NAME"-"$image"-"$vm" > /dev/null
 				TIMEFORMAT=%R
+
+				# Measure using the shell built-in time
 				RES="$( { time $FULL_COMMAND 1>>"$OUT_FILE" 2>> "$ERR_FILE" ; } 2>&1 )" && true
 				
 				if [ $? == 0 ]; then
-					writeStatus "OK" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE" "$OUT_FILE" "$ERR_FILE"
+					writeStatus "OK" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$OUT_FILE" "$ERR_FILE" "$RES"
 				else
-					writeStatus "ERROR" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$RESULT_FILE" "$OUT_FILE" "$ERR_FILE"
+					writeStatus "ERROR" "$ITERATIONS" "$BENCH_NAME" "$image" "$vm" "$OUT_FILE" "$ERR_FILE" "$RES"
 				fi
 
 				if [ "$AFTER_CMD" ]; then
@@ -106,7 +112,6 @@ runBenchs() {
 		done
 	done
 }
-
 
 # Run the benchmark configuration
 # each configuration should call the runBenchs function to run

@@ -9,7 +9,8 @@ ITERATIONS=${1:-1}
 # Before any test, this command is executed
 oneTimeSetUp() {
     result_file="./_build/results/benchy-runs.csv"
-    ITERATIONS=$ITERATIONS BENCHES_SCRIPT_DIR=test/testError/fourCalls ./runAll.sh aDate
+    date_time=aDate
+    ITERATIONS=$ITERATIONS DATE=$date_time BENCHES_SCRIPT_DIR=test/testError/fourCalls ./runAll.sh
 }
 
 # After all tests, the results files are removed
@@ -17,11 +18,15 @@ oneTimeTearDown() {
     rm -rf ./_build/results
 }
 
+testResultFileExists() {
+    assertTrue "[ -f $result_file ]"
+}
+
 # Checks that the first line in the csv file starts with "ERROR"
 testLine1IsError() {
     local line
     
-    line=$(sed '1q;d' "$result_file")
+    line=$(sed '3q;d' "$result_file")
     assertContains "$line" "ERROR"
 }
 
@@ -29,7 +34,7 @@ testLine1IsError() {
 testLine2IsOk() {
     local line
     
-    line=$(sed '2q;d' "$result_file")
+    line=$(sed '4q;d' "$result_file")
     assertContains "$line" "OK"
 }
 
@@ -37,7 +42,7 @@ testLine2IsOk() {
 testLine3IsError() {
     local line
     
-    line=$(sed '3q;d' "$result_file")
+    line=$(sed '5q;d' "$result_file")
     assertContains "$line" "ERROR"
 }
 
@@ -45,7 +50,7 @@ testLine3IsError() {
 testLine4IsOk() {
     local line
     
-    line=$(sed '4q;d' "$result_file")
+    line=$(sed '6q;d' "$result_file")
     assertContains "$line" "OK"
 }
 
@@ -54,7 +59,7 @@ testOnlyFourLinesInFile() {
     local lineCount
 
     lineCount=$(wc -l < "$result_file" | bc)
-    assertEquals 4 "$lineCount"
+    assertEquals 6 "$lineCount"
 }
 
 # Shift all command-line arguments before calling shunit2, so that arguments can be passed
