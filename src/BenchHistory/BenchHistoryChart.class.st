@@ -17,10 +17,29 @@ BenchHistoryChart class >> on: aPath [
 
 { #category : #benchmarks }
 BenchHistoryChart >> benchmarks [
+	"Answer a <Collection> of <BenchHistoryChart>"
 
-	^ (fileReference children
-		   collect: [ :e | e basename copyUpTo: $- ]
-		   as: Set) collect: [ :e | self historyOf: e ]
+	^ (NeoCSVReader on: self benchmarksReadStream)
+		recordClass: BenchMeasurementEntry;
+		skip: 2;
+		separator: $,;
+		addField: #measurement:;
+		addField: #status:;
+		addFloatField: #duration:;
+		addIntegerField: #iterationsCount:;
+		addField: #imageName:;
+		addField: #vmName:;
+		addField: #outputFilePath:;
+		addField: #errFilePath:;
+		addField: #time:;
+		upToEnd.
+]
+
+{ #category : #benchmarks }
+BenchHistoryChart >> benchmarksReadStream [
+	"Answer a <ReadStream> on the results file"
+
+	^ (fileReference / 'benchy-runs.csv') readStream
 ]
 
 { #category : #accessing }
