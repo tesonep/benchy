@@ -17,6 +17,7 @@ source ${__dir}/"environment.inc"
 # All measurement output is written in a single CSV file
 # Define main output CSV file name
 output_filename="benchy-runs.csv"
+
 # Set the main output file path
 export result_file="$BUILD_RESULTS_DIR"/"$output_filename"
 
@@ -26,7 +27,7 @@ basename(){
 	echo ${FULLNAME%.*}
 }
 
-# Write CSV header in line protocol format
+# Create CSV file if it does not exists and write header in line protocol format
 # Each line represents a data point.
 # 	Each data point requires a:
 #    measurement
@@ -34,26 +35,32 @@ basename(){
 #    (Optional) tag set
 #    timestamp
 createLineProtocolCSV() {
-	# Ensure results directory exists
-	mkdir -p "$BUILD_RESULTS_DIR"
-	echo "#datatype measurement,tag,double:.,tag,tag,tag,tag,tag,dateTime:RFC3339" > "$result_file"
-	echo "benchmark,status,duration,req_iterations,image_name,vm_name,output_file,err_file,time" >> "$result_file"
+	if [ ! -f "$result_file" ]; then
+		# Ensure results directory exists
+		mkdir -p "$BUILD_RESULTS_DIR"
+		echo "#datatype measurement,tag,double:.,tag,tag,tag,tag,tag,dateTime:RFC3339" > "$result_file"
+		echo "benchmark,status,duration,req_iterations,image_name,vm_name,output_file,err_file,time" >> "$result_file"
+	fi
 }
 
 export -f basename
 
 #Run the bench as argument, or all if argument is absent
-BENCHES_NAMES=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
-BENCHES_NAMES=${1-$BENCHES_NAMES}
+benchmark_names=$(find $BENCHES_SCRIPT_DIR -iname "*.sh" | xargs -n1 bash -c 'basename -s .sh' )
+benchmark_names=${1-$benchmark_names}
 
-# Warning: Do not rename any .inc to .sh in the benchmarks script directory 
+# Warning: Do NOT rename any .inc to .sh in the benchmarks script directory 
 # as the find command captures all the .sh scripts in the directory
-main () {
-	createLineProtocolCSV
-	for bench in $BENCHES_NAMES
+iterateBenchmarks() {
+	for bench in $benchmark_names
 	do
 		bash "$__dir/benchs/bench.inc" $BENCHES_SCRIPT_DIR $BUILD_VMS_DIR $BUILD_IMAGES_DIR $BUILD_RESULTS_DIR $DATE $BENCHES_SCRIPT_DIR/$bench.sh
 	done
+}
+
+main () {
+	createLineProtocolCSV
+	iterateBenchmarks
 }
 
 main
