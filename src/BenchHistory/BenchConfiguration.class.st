@@ -1,6 +1,6 @@
 Class {
 	#name : #BenchConfiguration,
-	#superclass : #Object,
+	#superclass : #BenchAbstractObject,
 	#instVars : [
 		'bench',
 		'config'

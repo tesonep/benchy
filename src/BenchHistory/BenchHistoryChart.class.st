@@ -65,16 +65,29 @@ BenchHistoryChart >> historyOf: aString [
 { #category : #plotting }
 BenchHistoryChart >> plot [
 
-	| canvas plots |
+	| canvas plots measurements successExecutions |
 	canvas := RSCanvas new.
-	plots := self benchmarks collect: [ :e | | p |
-		p := e plot build asShape.
-		canvas add: p.
-		p
-	].
-	RSGridLayout on: plots.
-	canvas @ RSCanvasController.
-	^ canvas
+	measurements := self benchmarks groupedBy: [ :e | e measurement ].
+	measurements do: [ : m | 
+		m
+			select: #isBenchmarkSuccess
+			thenDo: [ : successfulMeasurement | self plotMeasurement: successfulMeasurement on: canvas  ].
+		RSGridLayout on: plots.
+		canvas @ RSCanvasController.
+		canvas ].
+
+]
+
+{ #category : #private }
+BenchHistoryChart >> plotMeasurement: aBenchMeasurementEntry on: aRSCanvas [ 
+
+	| plot |
+	
+	plot = aBenchMeasurementEntry plot build asShape.
+	aRSCanvas add: plot.
+	" RSGridLayout on: plots "
+	aRSCanvas @ RSCanvasController.
+	^ aRSCanvas
 ]
 
 { #category : #accessing }

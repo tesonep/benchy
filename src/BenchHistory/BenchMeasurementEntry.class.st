@@ -3,7 +3,7 @@ Represents a single measurement: a logical grouping for a time-stamped record.
 "
 Class {
 	#name : #BenchMeasurementEntry,
-	#superclass : #Object,
+	#superclass : #BenchAbstractObject,
 	#instVars : [
 		'measurement',
 		'status',
@@ -54,6 +54,12 @@ BenchMeasurementEntry >> imageName: anObject [
 	imageName := anObject
 ]
 
+{ #category : #testing }
+BenchMeasurementEntry >> isBenchmarkSuccess [ 
+
+	^ self status = 'OK'
+]
+
 { #category : #accessing }
 BenchMeasurementEntry >> iterationsCount [
 
@@ -88,6 +94,17 @@ BenchMeasurementEntry >> outputFilePath [
 BenchMeasurementEntry >> outputFilePath: anObject [
 
 	outputFilePath := anObject
+]
+
+{ #category : #plotting }
+BenchMeasurementEntry >> plot [
+
+	| c |
+	c := RSChart new.
+	c title: self measurement.
+	c colors: NSScale google20.
+	self addToChart: c.
+	^ c
 ]
 
 { #category : #printing }
