@@ -1,20 +1,38 @@
+"
+A benchy history holds a `Collection` of `BenchyConfiguration`s, and it knows how to plot them through the method `BenchyHistory>>plot`.
+
+It can be created using on: and passing a path `String` as argument. The path should contain a CSV file (by default named in `defaultBenchmarkResultsFilename`). The format of the CSV is read by `readBenchmarkEntries` method.
+
+## Example
+
+```language=Pharo
+benchyHistory := BenchyHistory on: '/directory/with/csv'
+```
+
+Plotting:
+
+```language=Pharo
+benchyHistory plot.
+```
+
+Check `BenchyTestCase` to see examples of the input CSV file format.
+"
 Class {
 	#name : #BenchyHistory,
 	#superclass : #BenchybstractObject,
 	#instVars : [
 		'benchmarkResultsFilename',
 		'benchmarksReadStream',
-		'basePath'
+		'basePath',
+		'configurations'
 	],
-	#category : #Benchy
+	#category : #'Benchy-Core'
 }
 
-{ #category : #'instance creation' }
-BenchyHistory class >> on: aPath [
+{ #category : #adding }
+BenchyHistory >> addConfiguration: aBenchConfiguration [
 
-	^ self new
-		basePath: aPath;
-		yourself
+	self configurations add: aBenchConfiguration
 ]
 
 { #category : #accessing }
@@ -113,33 +131,22 @@ BenchyHistory >> buildChartFrom: measurementsDictionary canvas: aCanvas [
 
 { #category : #plotting }
 BenchyHistory >> collectPlotsFrom: measurements canvas: aRSCanvas [
-	" Answer a <Collection> of <RSChart> "
+	" Answer a <Collection> of <RSChart> to be plotted in aRSCanvas "
 
 	^ measurements collect: [ : measurementsDictionary | 
 		self buildChartFrom: measurementsDictionary canvas: aRSCanvas ].
 ]
 
-{ #category : #private }
-BenchyHistory >> computeTimeAveragePerDay: aCollection [ 
+{ #category : #accessing }
+BenchyHistory >> configurations [
 
-	| successfulBenchmarks durationsAverage stdev |
-	
-	successfulBenchmarks := aCollection select: #isBenchmarkSuccess.
-	successfulBenchmarks size < 2
-		ifTrue: [
-			durationsAverage := 0.
-			stdev := 0 ]
-		ifFalse: [ 
-			| durations |
-			durations := successfulBenchmarks collect: [ : measurementEntry | measurementEntry duration ].
-			durationsAverage := durations average.
-			stdev := durations stdev ].
+	^ configurations
+]
 
-	^ {
-		  durationsAverage .
-		  (durationsAverage + stdev) .
-		  (durationsAverage - stdev) 
-		}
+{ #category : #accessing }
+BenchyHistory >> configurations: anObject [
+
+	configurations := anObject
 ]
 
 { #category : #benchmarks }
@@ -148,7 +155,7 @@ BenchyHistory >> defaultBenchmarkResultsFilename [
 	^ 'benchy-runs.csv'
 ]
 
-{ #category : #private }
+{ #category : #adding }
 BenchyHistory >> groupMeasurementsByBenchmarkConfigAndDate [
 	"Read the receiver's benchmark results in CSV format and group first by the benchmark (slopstone, richards, etc).
 	and then group them by configuration (a combination of image and VM) and by date at day precision"
@@ -156,8 +163,27 @@ BenchyHistory >> groupMeasurementsByBenchmarkConfigAndDate [
 	| entriesByBenchmark entriesByBenchmarkAndConfig |
 
 	entriesByBenchmark := self readBenchmarkEntries groupedBy: [ :e | e measurement ].
+	entriesByBenchmark keysAndValuesDo: [ : benchmarkName : entries |
+		self addConfiguration: (self newConfigFor: entries named: benchmarkName) ].
+
 	entriesByBenchmarkAndConfig := entriesByBenchmark collect: [ : benchyMeasurement | benchyMeasurement groupedBy: [ : e | e imageName , '-' , e vmName ] ].
 	^ entriesByBenchmarkAndConfig collect: [ : byConfigDict | (byConfigDict collect: [ : config | config groupedBy: #dayTime ]) ].
+]
+
+{ #category : #initialization }
+BenchyHistory >> initialize [
+
+	super initialize.
+	self configurations: OrderedCollection new.
+]
+
+{ #category : #plotting }
+BenchyHistory >> newConfigFor: aCollection named: aString [
+
+	^ BenchyConfiguration new
+		configurationName: aString;
+		entries: aCollection;
+		yourself
 ]
 
 { #category : #plotting }

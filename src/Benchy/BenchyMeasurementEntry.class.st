@@ -15,7 +15,7 @@ Class {
 		'errFilePath',
 		'time'
 	],
-	#category : #Benchy
+	#category : #'Benchy-Core'
 }
 
 { #category : #accessing }
