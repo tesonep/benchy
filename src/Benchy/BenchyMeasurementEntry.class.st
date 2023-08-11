@@ -2,8 +2,8 @@
 Represents a single measurement: a logical grouping for a time-stamped record.
 "
 Class {
-	#name : #BenchMeasurementEntry,
-	#superclass : #BenchAbstractObject,
+	#name : #BenchyMeasurementEntry,
+	#superclass : #BenchybstractObject,
 	#instVars : [
 		'measurement',
 		'status',
@@ -15,89 +15,96 @@ Class {
 		'errFilePath',
 		'time'
 	],
-	#category : #BenchHistory
+	#category : #Benchy
 }
 
 { #category : #accessing }
-BenchMeasurementEntry >> duration [
+BenchyMeasurementEntry >> dayTime [
+	" Answer the receiver's time of creation up to day precision (this is for grouping measurements by day in the X-axis in the chart)"
+
+	^ (DateAndTime fromString: self time) asDate
+]
+
+{ #category : #accessing }
+BenchyMeasurementEntry >> duration [
 
 	^ duration
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> duration: anObject [
+BenchyMeasurementEntry >> duration: anObject [
 
 	duration := anObject
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> errFilePath [
+BenchyMeasurementEntry >> errFilePath [
 
 	^ errFilePath
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> errFilePath: anObject [
+BenchyMeasurementEntry >> errFilePath: anObject [
 
 	errFilePath := anObject
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> imageName [
+BenchyMeasurementEntry >> imageName [
 
 	^ imageName
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> imageName: anObject [
+BenchyMeasurementEntry >> imageName: anObject [
 
 	imageName := anObject
 ]
 
 { #category : #testing }
-BenchMeasurementEntry >> isBenchmarkSuccess [ 
+BenchyMeasurementEntry >> isBenchmarkSuccess [ 
 
 	^ self status = 'OK'
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> iterationsCount [
+BenchyMeasurementEntry >> iterationsCount [
 
 	^ iterationsCount
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> iterationsCount: anObject [
+BenchyMeasurementEntry >> iterationsCount: anObject [
 
 	iterationsCount := anObject
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> measurement [
+BenchyMeasurementEntry >> measurement [
 
 	^ measurement
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> measurement: anObject [
+BenchyMeasurementEntry >> measurement: anObject [
 
 	measurement := anObject
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> outputFilePath [
+BenchyMeasurementEntry >> outputFilePath [
 
 	^ outputFilePath
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> outputFilePath: anObject [
+BenchyMeasurementEntry >> outputFilePath: anObject [
 
 	outputFilePath := anObject
 ]
 
 { #category : #plotting }
-BenchMeasurementEntry >> plot [
+BenchyMeasurementEntry >> plot [
 
 	| c |
 	c := RSChart new.
@@ -108,7 +115,7 @@ BenchMeasurementEntry >> plot [
 ]
 
 { #category : #printing }
-BenchMeasurementEntry >> printOn: aStream [
+BenchyMeasurementEntry >> printOn: aStream [
 
 	super printOn: aStream.
 	aStream
@@ -124,37 +131,37 @@ BenchMeasurementEntry >> printOn: aStream [
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> status [
+BenchyMeasurementEntry >> status [
 
 	^ status
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> status: anObject [
+BenchyMeasurementEntry >> status: anObject [
 
 	status := anObject
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> time [
+BenchyMeasurementEntry >> time [
 
 	^ time
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> time: anObject [
+BenchyMeasurementEntry >> time: anObject [
 
 	time := anObject
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> vmName [
+BenchyMeasurementEntry >> vmName [
 
 	^ vmName
 ]
 
 { #category : #accessing }
-BenchMeasurementEntry >> vmName: anObject [
+BenchyMeasurementEntry >> vmName: anObject [
 
 	vmName := anObject
 ]

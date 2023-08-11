@@ -25,7 +25,6 @@ BenchMulticonfiguration >> addToChart: c [
 	| b |
 	b := RSLegend new.
 	self addToChart: c legend: b.
-
 	b container: c canvas.
 	b legendDo: [ :shape | shape scaleBy: 0.6 ].
 	b layout vertical.

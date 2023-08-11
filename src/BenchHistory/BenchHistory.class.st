@@ -8,6 +8,14 @@ Class {
 	#category : #BenchHistory
 }
 
+{ #category : #'instance creation' }
+BenchHistory class >> on: aPath [
+
+	^ self new
+		fileReference: aPath;
+		yourself
+]
+
 { #category : #accessing }
 BenchHistory >> configAt: aCollection [
 

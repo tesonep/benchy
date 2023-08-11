@@ -17,29 +17,10 @@ BenchHistoryChart class >> on: aPath [
 
 { #category : #benchmarks }
 BenchHistoryChart >> benchmarks [
-	"Answer a <Collection> of <BenchHistoryChart>"
 
-	^ (NeoCSVReader on: self benchmarksReadStream)
-		recordClass: BenchMeasurementEntry;
-		skip: 2;
-		separator: $,;
-		addField: #measurement:;
-		addField: #status:;
-		addFloatField: #duration:;
-		addIntegerField: #iterationsCount:;
-		addField: #imageName:;
-		addField: #vmName:;
-		addField: #outputFilePath:;
-		addField: #errFilePath:;
-		addField: #time:;
-		upToEnd.
-]
-
-{ #category : #benchmarks }
-BenchHistoryChart >> benchmarksReadStream [
-	"Answer a <ReadStream> on the results file"
-
-	^ (fileReference / 'benchy-runs.csv') readStream
+	^ (fileReference children
+		   collect: [ :e | e basename copyUpTo: $- ]
+		   as: Set) collect: [ :e | self historyOf: e ]
 ]
 
 { #category : #accessing }
@@ -65,29 +46,16 @@ BenchHistoryChart >> historyOf: aString [
 { #category : #plotting }
 BenchHistoryChart >> plot [
 
-	| canvas plots measurements successExecutions |
+	| canvas plots |
 	canvas := RSCanvas new.
-	measurements := self benchmarks groupedBy: [ :e | e measurement ].
-	measurements do: [ : m | 
-		m
-			select: #isBenchmarkSuccess
-			thenDo: [ : successfulMeasurement | self plotMeasurement: successfulMeasurement on: canvas  ].
-		RSGridLayout on: plots.
-		canvas @ RSCanvasController.
-		canvas ].
-
-]
-
-{ #category : #private }
-BenchHistoryChart >> plotMeasurement: aBenchMeasurementEntry on: aRSCanvas [ 
-
-	| plot |
-	
-	plot = aBenchMeasurementEntry plot build asShape.
-	aRSCanvas add: plot.
-	" RSGridLayout on: plots "
-	aRSCanvas @ RSCanvasController.
-	^ aRSCanvas
+	plots := self benchmarks collect: [ :e | | p |
+		p := e plot build asShape.
+		canvas add: p.
+		p
+	].
+	RSGridLayout on: plots.
+	canvas @ RSCanvasController.
+	^ canvas
 ]
 
 { #category : #accessing }
