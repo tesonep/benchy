@@ -62,6 +62,7 @@ BenchConfiguration >> computeTimeAveragePerDay [
 
 	| datapoints |
 	datapoints := self resultFiles.
+
 	^ datapoints collect: [ :e |
 		  | times average stdev |
 		  times := ((NeoCSVReader on: e readStream)
