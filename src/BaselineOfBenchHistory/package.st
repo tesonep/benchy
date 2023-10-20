@@ -1,1 +1,1 @@
-Package { #name : #BaselineOfBenchHistory }
+Package { #name : 'BaselineOfBenchHistory' }
