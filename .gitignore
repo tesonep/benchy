@@ -2,3 +2,7 @@
 _build
 Rplots.pdf
 .DS_Store
+*.data
+*.log
+*.fuel
+*-Test.xml

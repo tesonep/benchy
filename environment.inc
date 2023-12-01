@@ -6,6 +6,9 @@ set -o pipefail
 set -o nounset
 # set -o xtrace
 
+# Add common application folder to the path
+PATH=/opt/homebrew/bin:$PATH
+
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
