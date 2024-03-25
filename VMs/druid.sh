@@ -4,4 +4,4 @@ source "$1/VMs.inc"
 
 updateVMRepo druid
 
-buildVM DruidVM
+buildVM DruidVMFullCompilation

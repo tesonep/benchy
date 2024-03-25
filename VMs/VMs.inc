@@ -9,6 +9,8 @@ set -o nounset
 # Set current file directory for relative access
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+source ${__dir}/../"environment.inc"
+
 ARCH=$(uname -m)
 OS=$(uname -s)
 BUILD_VMS_DIR=$2
